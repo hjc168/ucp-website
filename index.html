@@ -1059,35 +1059,11 @@
             <!-- Navigation -->
             <nav class="header__nav" id="mainNav">
                 <ul class="nav__list">
-                    <li class="nav__item">
-                        <a href="#" class="nav__link">UCP Group <i class="fas fa-chevron-down"></i></a>
-                        <div class="nav__dropdown">
-                            <a href="#">About Us</a>
-                            <a href="#">Social Contribution</a>
-                            <a href="#">Global Footprint</a>
-                        </div>
-                    </li>
-                    <li class="nav__item">
-                        <a href="#" class="nav__link">Products &amp; Services <i class="fas fa-chevron-down"></i></a>
-                        <div class="nav__dropdown">
-                            <a href="#">Artisanal Design</a>
-                            <a href="#">Floral, Plants &amp; Greeneries</a>
-                            <a href="#">Home Décor Accents</a>
-                            <a href="#">Seasonal &amp; Festive Décor</a>
-                        </div>
-                    </li>
-                    <li class="nav__item">
-                        <a href="#" class="nav__link">Sustainability &amp; Innovation <i class="fas fa-chevron-down"></i></a>
-                        <div class="nav__dropdown">
-                            <a href="#">Our Breakthroughs</a>
-                            <a href="#">Climate Change</a>
-                            <a href="#">Sustainable Materials</a>
-                            <a href="#">Green Manufacturing</a>
-                        </div>
-                    </li>
-                    <li class="nav__item"><a href="#" class="nav__link">Careers</a></li>
-                    <li class="nav__item"><a href="#" class="nav__link">Newsroom</a></li>
-                    <li class="nav__item"><a href="#" class="nav__link">Contact Us</a></li>
+                    <li class="nav__item"><a href="#" class="nav__link active" data-en="Home" data-zh="首页">Home</a></li>
+                    <li class="nav__item"><a href="#" class="nav__link" data-en="Products" data-zh="产品">Products</a></li>
+                    <li class="nav__item"><a href="#" class="nav__link" data-en="Showroom" data-zh="展厅">Showroom</a></li>
+                    <li class="nav__item"><a href="#" class="nav__link" data-en="Contact Us" data-zh="联系我们">Contact Us</a></li>
+                    <li class="nav__item"><a href="#" class="nav__link" data-en="About Us" data-zh="关于我们">About Us</a></li>
                 </ul>
             </nav>
 
@@ -1484,6 +1460,21 @@
 
     <!-- ===== SCRIPTS ===== -->
     <script>
+        // --- Language toggle ---
+        const langBtn = document.querySelector('.header__lang');
+        let currentLang = 'en';
+
+        langBtn.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            langBtn.innerHTML = currentLang === 'en'
+                ? '<i class="fas fa-globe"></i> EN <i class="fas fa-chevron-down" style="font-size:10px"></i>'
+                : '<i class="fas fa-globe"></i> 中文 <i class="fas fa-chevron-down" style="font-size:10px"></i>';
+
+            document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+        });
+
         // --- Mobile menu toggle ---
         const mobileToggle = document.getElementById('mobileToggle');
         const mainNav = document.getElementById('mainNav');
