@@ -1041,6 +1041,46 @@
             .impact__grid { grid-template-columns: 1fr; max-width: 280px; margin: 0 auto; }
             .impact-card__number { font-size: 32px; }
         }
+
+        /* ===== PAGE BANNER ===== */
+        .page-banner {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .page-banner__bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .page-banner__content {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+            text-align: center;
+        }
+        .page-banner__breadcrumb {
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 16px;
+        }
+        .page-banner__title {
+            font-family: var(--font-serif);
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        .products-grid a.product-card {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .page-banner { height: 280px; }
+        }
+
     </style>
 </head>
 <body>
@@ -1059,7 +1099,7 @@
             <!-- Navigation -->
             <nav class="header__nav" id="mainNav">
                 <ul class="nav__list">
-                    <li class="nav__item"><a href="#" class="nav__link active" data-en="Home" data-zh="首页">Home</a></li>
+                    <li class="nav__item"><a href="index.html" class="nav__link" data-en="Home" data-zh="首页">Home</a></li>
                     <li class="nav__item"><a href="products.html" class="nav__link" data-en="Products" data-zh="产品">Products</a></li>
                     <li class="nav__item"><a href="#" class="nav__link" data-en="Showroom" data-zh="展厅">Showroom</a></li>
                     <li class="nav__item"><a href="#" class="nav__link" data-en="Contact Us" data-zh="联系我们">Contact Us</a></li>
@@ -1095,296 +1135,104 @@
         </div>
     </div>
 
-    <!-- ===== HERO ===== -->
-    <section class="hero" id="hero">
-        <!-- Fallback image (shown if video doesn't load) -->
-        <img
-            class="hero__fallback"
-            src="https://images.unsplash.com/photo-1487700160041-b3ef7e8e9b3b?w=1920&q=80"
-            alt="Artificial botanical products"
-            loading="eager"
-        >
-        <!-- Video background: replace with actual UCP video -->
-        <video class="hero__video" autoplay loop muted playsinline
-               poster="https://images.unsplash.com/photo-1487700160041-b3ef7e8e9b3b?w=1920&q=80">
-            <source src="https://ucpgroup1.wpengine.com/wp-content/uploads/2022/12/UCP-banner_v4.2_resize.mp4" type="video/mp4">
-        </video>
-        <div class="hero__overlay"></div>
-        <div class="hero__content">
-            <p class="hero__quote" data-en='"Bringing more than 60 years of family values and experiences in the artificial botanical industry, we focus on craftsmanship, innovation, and premium quality artificial floral and home decoration products. Our commitment is to our people, our communities, and our planet."' data-zh='"我们拥有超过60年的家族价值观和人造植物行业经验，专注于工艺、创新和优质人造花卉及家居装饰产品。我们致力于服务我们的员工、社区和地球。"'></p>
-            <div class="hero__cta">
-                <a href="#products" class="btn btn-white" data-en="Explore Our Products" data-zh="探索我们的产品">Explore Our Products</a>
-            </div>
-        </div>
-        <div class="hero__scroll" data-en="SCROLL" data-zh="向下滚动">
-            SCROLL<span></span>
+    
+
+    <!-- ===== PAGE BANNER ===== -->
+    <section class="page-banner">
+        <div class="page-banner__bg" style="background: linear-gradient(135deg, rgba(50,55,60,0.85) 0%, rgba(86,54,209,0.7) 100%), url('https://images.unsplash.com/photo-1487530811176-3780de880c2e?w=1920&q=80') center/cover no-repeat;"></div>
+        <div class="container page-banner__content">
+            <p class="page-banner__breadcrumb" data-en="Home | Artisanal Design" data-zh="首页 | 设计及手工艺">Home | Artisanal Design</p>
+            <h1 class="page-banner__title" data-en="Artisanal Design" data-zh="设计及手工艺">Artisanal Design</h1>
         </div>
     </section>
 
-    <!-- ===== PRODUCTS SECTION ===== -->
-    <section class="section section--cream" id="products">
+    <!-- ===== INSPIRED BY NATURE ===== -->
+    <section class="section">
+        <div class="container">
+            <div class="split">
+                <div class="split__content">
+                    <h2 data-en="Inspired by Nature" data-zh="从大自然而来的灵感">Inspired by Nature</h2>
+                    <p data-en="We are dedicated to continuous improvement, with meticulously designed products spanning multiple collections that embody our commitment to design excellence, quality, and sustainability." data-zh="我们力求进步，精心设计的产品涵盖多个系列，实践了我们在产品设计、品质与可持续发展方面的承诺。">
+                        We are dedicated to continuous improvement, with meticulously designed products spanning multiple collections that embody our commitment to design excellence, quality, and sustainability.
+                    </p>
+                </div>
+                <div class="split__image">
+                    <img src="https://ucpgroup.com/wp-content/uploads/2022/10/product-_-services_artisanal-design-1024x564.png" alt="Artisanal Design" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PRODUCT CATEGORIES ===== -->
+    <section class="section section--cream">
         <div class="container">
             <div class="section__header">
                 <p class="section__label" data-en="Our Products" data-zh="我们的产品">Our Products</p>
-                <h2 class="section__title" data-en="Designed and Made with<br>Sustainability in Mind" data-zh="以可持续发展为理念<br>设计与制造">Designed and Made with<br>Sustainability in Mind</h2>
-                <p class="section__subtitle" data-en="Never one to rest on its laurels, UCP has evolved from a family business into a global leader in the artificial botanical industry." data-zh="UCP 从不固步自封，已从家族企业发展成为人造植物行业的全球领导者。">
-                    Never one to rest on its laurels, UCP has evolved from a family business into
-                    a global leader in the artificial botanical industry.
+                <h2 class="section__title" data-en="Designed with Sustainability in Mind" data-zh="我们的产品糅合可持续发展理念">Designed with Sustainability in Mind</h2>
+                <p class="section__subtitle" data-en="Explore our diverse product ranges, each crafted with care by our skilled artisans and designers." data-zh="探索我们多元化的产品系列，每一件都由技艺精湛的工匠和设计师精心打造。">
+                    Explore our diverse product ranges, each crafted with care by our skilled artisans and designers.
                 </p>
             </div>
 
             <div class="products-grid">
-                <div class="product-card">
-                    <img class="product-card__img" src="https://images.unsplash.com/photo-1487700160041-b3ef7e8e9b3b?w=600&q=80" alt="Floral, Plants & Greeneries" loading="lazy">
+                <a href="floral-plants.html" class="product-card">
+                    <img class="product-card__img" src="https://ucpgroup.com/wp-content/uploads/2022/10/UPC-Products-Services-Category-1.png" alt="Floral, Plants & Greeneries" loading="lazy">
                     <div class="product-card__overlay"></div>
                     <div class="product-card__content">
-                        <h3 class="product-card__title" data-en="Floral, Plants &amp; Greeneries" data-zh="花卉、植物与绿化">Floral, Plants &amp; Greeneries</h3>
+                        <h3 class="product-card__title" data-en="Floral, Plants &amp; Greeneries" data-zh="仿真花卉、植物与绿色植物">Floral, Plants &amp; Greeneries</h3>
                         <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
                     </div>
-                </div>
-                <div class="product-card">
-                    <img class="product-card__img" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80" alt="Home Décor Accents" loading="lazy">
+                </a>
+                <a href="#" class="product-card">
+                    <img class="product-card__img" src="https://ucpgroup.com/wp-content/uploads/2022/10/UPC-Products-Services-Category-2.jpg" alt="Home Decor Accents" loading="lazy">
                     <div class="product-card__overlay"></div>
                     <div class="product-card__content">
-                        <h3 class="product-card__title" data-en="Home Décor Accents" data-zh="家居装饰精品">Home Décor Accents</h3>
+                        <h3 class="product-card__title" data-en="Home Decor Accents" data-zh="家居装饰品">Home Decor Accents</h3>
                         <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
                     </div>
-                </div>
-                <div class="product-card">
-                    <img class="product-card__img" src="https://images.unsplash.com/photo-1606761568499-6d2451b07266?w=600&q=80" alt="Seasonal & Festive Décor" loading="lazy">
+                </a>
+                <a href="#" class="product-card">
+                    <img class="product-card__img" src="https://ucpgroup.com/wp-content/uploads/2022/10/UPC-Products-Services-Category-3.jpg" alt="Seasonal & Festive Decor" loading="lazy">
                     <div class="product-card__overlay"></div>
                     <div class="product-card__content">
-                        <h3 class="product-card__title" data-en="Seasonal &amp; Festive Décor" data-zh="节庆装饰系列">Seasonal &amp; Festive Décor</h3>
+                        <h3 class="product-card__title" data-en="Seasonal &amp; Festive Decor" data-zh="季节性与节庆家居装饰品">Seasonal &amp; Festive Decor</h3>
                         <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- ===== GLOBAL REACH ===== -->
+    <!-- ===== TREND-SETTING CRAFTSMANSHIP ===== -->
     <section class="section">
-        <div class="container global-reach">
-            <div class="section__header">
-                <p class="section__label" data-en="Global Presence" data-zh="全球布局">Global Presence</p>
-                <h2 class="section__title" data-en="Our Global Reach" data-zh="我们的全球版图">Our Global Reach</h2>
-            </div>
-            <img
-                class="global-reach__map"
-                src="https://ucpgroup.com/wp-content/uploads/2022/10/homepage_world-map-e1667117172667.png"
-                alt="World map showing UCP global footprint"
-                loading="lazy"
-            >
-            <div class="global-reach__stats">
-                <div class="global-stat">
-                    <div class="global-stat__number">60+</div>
-                    <p class="global-stat__label" data-en="Countries Served" data-zh="服务国家">Countries Served</p>
-                </div>
-                <div class="global-stat">
-                    <div class="global-stat__number">5</div>
-                    <p class="global-stat__label" data-en="Manufacturing Facilities" data-zh="生产基地">Manufacturing Facilities</p>
-                </div>
-                <div class="global-stat">
-                    <div class="global-stat__number">1,200+</div>
-                    <p class="global-stat__label" data-en="Patents &amp; Designs" data-zh="专利与设计">Patents &amp; Designs</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== TESTIMONIALS ===== -->
-    <section class="section section--light testimonials" id="testimonials">
-        <div class="container">
-            <div class="section__header">
-                <p class="section__label" data-en="Testimonials" data-zh="客户评价">Testimonials</p>
-                <h2 class="section__title" data-en="Our Partner's Testimonial" data-zh="合作伙伴的评价">Our Partner's Testimonial</h2>
-            </div>
-
-            <div class="testimonial-track" id="testimonialTrack">
-                <div class="testimonial-card">
-                    <div class="testimonial-card__inner">
-                        <img class="testimonial-card__logo" src="https://ucpgroup.com/wp-content/uploads/2022/12/VIDHAYAKOM_logo-1.png" alt="Vidhayakom" loading="lazy">
-                        <blockquote class="testimonial-card__quote">
-                            "UCP's dedication to quality and sustainability is unmatched. Their
-                            artificial botanicals have transformed our retail spaces and delighted
-                            our customers across Southeast Asia."
-                        </blockquote>
-                        <p class="testimonial-card__author">Eddie Togo</p>
-                        <p class="testimonial-card__role">Managing Director, Vidhayakom</p>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-card__inner">
-                        <img class="testimonial-card__logo" src="https://ucpgroup.com/wp-content/uploads/2022/12/VIDHAYAKOM_logo-1.png" alt="Partner" loading="lazy">
-                        <blockquote class="testimonial-card__quote">
-                            "Working with UCP Group has been an exceptional experience. Their
-                            innovative approach to sustainable materials sets them apart in the
-                            industry."
-                        </blockquote>
-                        <p class="testimonial-card__author">Sarah Chen</p>
-                        <p class="testimonial-card__role">CEO, GreenLiving International</p>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-card__inner">
-                        <img class="testimonial-card__logo" src="https://ucpgroup.com/wp-content/uploads/2022/12/VIDHAYAKOM_logo-1.png" alt="Partner" loading="lazy">
-                        <blockquote class="testimonial-card__quote">
-                            "The craftsmanship and attention to detail in UCP's products is
-                            extraordinary. They are truly the gold standard in artificial
-                            botanicals."
-                        </blockquote>
-                        <p class="testimonial-card__author">Michael Reeves</p>
-                        <p class="testimonial-card__role">Creative Director, Bloom &amp; Ivy</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="testimonial-nav">
-                <button id="testimonialPrev" aria-label="Previous"><i class="fas fa-arrow-left"></i></button>
-                <button id="testimonialNext" aria-label="Next"><i class="fas fa-arrow-right"></i></button>
-            </div>
-            <div class="testimonial-dots" id="testimonialDots"></div>
-        </div>
-    </section>
-
-    <!-- ===== ECO-FRIENDLY SECTION ===== -->
-    <section class="section">
-        <div class="container">
-            <div class="split">
-                <div class="split__image">
-                    <img src="https://images.unsplash.com/photo-1520412099551-62b6bafeb5e9?w=800&q=80" alt="Eco-friendly products" loading="lazy">
-                </div>
-                <div class="split__content">
-                    <h2 data-en="Our Eco-Friendly Products" data-zh="我们的环保产品">Our Eco-Friendly Products</h2>
-                    <p data-en="We are committed to creating beautiful, durable artificial botanicals that minimize environmental impact. From recycled materials to biodegradable packaging, every product is designed with the planet in mind." data-zh="我们致力于创造美观、耐用的人造植物，最大限度地减少对环境的影响。从回收材料到可生物降解包装，每一件产品都以环保为设计理念。">
-                        We are committed to creating beautiful, durable artificial botanicals
-                        that minimize environmental impact. From recycled materials to
-                        biodegradable packaging, every product is designed with the planet in mind.
-                    </p>
-                    <p data-en="Our research and development team continuously innovates to reduce our carbon footprint while maintaining the premium quality our customers expect." data-zh="我们的研发团队不断创新，在保持客户期望的优质品质的同时减少碳足迹。">
-                        Our research and development team continuously innovates to reduce our
-                        carbon footprint while maintaining the premium quality our customers expect.
-                    </p>
-                    <a href="#" class="btn btn-primary" data-en="Discover More" data-zh="了解更多">Discover More</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== SUSTAINABILITY JOURNEY ===== -->
-    <section class="section section--cream">
         <div class="container">
             <div class="split split--reverse">
-                <div class="split__image">
-                    <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80" alt="Sustainability journey" loading="lazy">
-                </div>
                 <div class="split__content">
-                    <h2 data-en="Our Sustainability &amp; Innovation Journey" data-zh="我们的可持续发展与创新之旅">Our Sustainability &amp; Innovation Journey</h2>
-                    <p data-en="For over six decades, we have pioneered sustainable practices in the artificial botanical industry. Our journey is defined by continuous improvement, breakthrough innovations, and an unwavering commitment to environmental stewardship." data-zh="六十多年来，我们一直在人造植物行业开创可持续发展的实践。我们的旅程以持续改进、突破性创新和对环境管理的坚定承诺为标志。">
-                        For over six decades, we have pioneered sustainable practices in the
-                        artificial botanical industry. Our journey is defined by continuous
-                        improvement, breakthrough innovations, and an unwavering commitment
-                        to environmental stewardship.
+                    <h2 data-en="Trend-Setting Craftsmanship" data-zh="紧贴潮流的手工艺">Trend-Setting Craftsmanship</h2>
+                    <p data-en="We draw inspiration from nature. From flowers and plant stems to indoor and tropical plants, our designers and artisans meticulously study their forms at every angle and growth stage, reflecting our deep passion for the natural world." data-zh="我们以大自然为灵感。不论是花卉、植物枝干，以至室内与热带植物，我们的设计师及工匠会细心研究它们在不同角度和生长阶段的形态，充分展现我们对大自然的热爱。">
+                        We draw inspiration from nature. From flowers and plant stems to indoor and tropical plants, our designers and artisans meticulously study their forms at every angle and growth stage, reflecting our deep passion for the natural world.
                     </p>
-                    <p data-en="We are proud to lead the industry toward a greener, more sustainable future for generations to come." data-zh="我们为能够引领行业走向更绿色、更可持续的未来而感到自豪。">
-                        We are proud to lead the industry toward a greener, more sustainable future
-                        for generations to come.
+                    <p data-en="Our products blend sustainability with celebration, allowing people to decorate their lives across seasons and festivals while contributing to environmental protection." data-zh="我们的产品糅合可持续发展理念，让人们在不同季节与节日点缀生活，也共同为保护环境作出贡献。">
+                        Our products blend sustainability with celebration, allowing people to decorate their lives across seasons and festivals while contributing to environmental protection.
                     </p>
-                    <a href="#" class="btn btn-outline" data-en="Learn More" data-zh="了解更多">Learn More</a>
+                </div>
+                <div class="split__image">
+                    <img src="https://images.unsplash.com/photo-1520412099551-62b6bafeb5e9?w=800&q=80" alt="Craftsmanship" loading="lazy">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== IMPACT STATS ===== -->
-    <section class="section impact">
-        <div class="container">
-            <div class="section__header">
-                <p class="section__label" data-en="Our Impact" data-zh="我们的影响力">Our Impact</p>
-                <h2 class="section__title" data-en="Making a Difference" data-zh="创造不同">Making a Difference</h2>
-            </div>
-
-            <div class="impact__grid">
-                <div class="impact-card">
-                    <div class="impact-card__icon">🌍</div>
-                    <div class="impact-card__number">2%</div>
-                    <p class="impact-card__label" data-en="of annual profits donated<br>to social causes" data-zh="年度利润捐赠<br>社会公益事业">of annual profits donated<br>to social causes</p>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-card__icon">♻️</div>
-                    <div class="impact-card__number">137,000+</div>
-                    <p class="impact-card__label" data-en="kg of plastic wrap<br>eliminated annually" data-zh="每年减少塑料包装<br>使用量（公斤）">kg of plastic wrap<br>eliminated annually</p>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-card__icon">🫙</div>
-                    <div class="impact-card__number">10M+</div>
-                    <p class="impact-card__label" data-en="recycled plastic bottles<br>used in production" data-zh="回收塑料瓶<br>用于生产">recycled plastic bottles<br>used in production</p>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-card__icon">👥</div>
-                    <div class="impact-card__number">2,000+</div>
-                    <p class="impact-card__label" data-en="team members<br>worldwide" data-zh="全球员工<br>团队成员">team members<br>worldwide</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== PEOPLE OF UCP ===== -->
-    <section class="section section--light" id="people">
-        <div class="container">
-            <div class="section__header">
-                <p class="section__label" data-en="Our People" data-zh="我们的团队">Our People</p>
-                <h2 class="section__title" data-en="People of UCP" data-zh="UCP 人物">People of UCP</h2>
-                <p class="section__subtitle" data-en="Hear from the talented individuals who bring our vision to life every day." data-zh="听听那些每天将我们的愿景变为现实的优秀人才的故事。">
-                    Hear from the talented individuals who bring our vision to life every day.
-                </p>
-            </div>
-
-            <div class="videos-grid">
-                <div class="video-card">
-                    <div class="video-card__thumb" onclick="this.querySelector('video').play(); this.querySelector('.video-card__play').style.display='none'">
-                        <img src="https://ucpgroup.com/wp-content/uploads/2022/12/Thumbnail-Jennifer-Chow-Eng.jpg" alt="Jennifer Chow" loading="lazy">
-                        <div class="video-card__play"><span><i class="fas fa-play"></i></span></div>
-                    </div>
-                    <div class="video-card__info">
-                        <p class="video-card__name">Jennifer Chow</p>
-                        <p class="video-card__title">Senior Designer</p>
-                    </div>
-                </div>
-                <div class="video-card">
-                    <div class="video-card__thumb" onclick="this.querySelector('video').play(); this.querySelector('.video-card__play').style.display='none'">
-                        <img src="https://ucpgroup.com/wp-content/uploads/2022/12/Thumbnail-Michael-Kwan-Eng.jpg" alt="Michael Kwan" loading="lazy">
-                        <div class="video-card__play"><span><i class="fas fa-play"></i></span></div>
-                    </div>
-                    <div class="video-card__info">
-                        <p class="video-card__name">Michael Kwan</p>
-                        <p class="video-card__title">Production Manager</p>
-                    </div>
-                </div>
-                <div class="video-card">
-                    <div class="video-card__thumb" onclick="this.querySelector('video').play(); this.querySelector('.video-card__play').style.display='none'">
-                        <img src="https://ucpgroup.com/wp-content/uploads/2023/09/Marc-Bass-eng-sub.jpg" alt="Marc Bass" loading="lazy">
-                        <div class="video-card__play"><span><i class="fas fa-play"></i></span></div>
-                    </div>
-                    <div class="video-card__info">
-                        <p class="video-card__name">Marc Bass</p>
-                        <p class="video-card__title">Sustainability Lead</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== CTA BANNER ===== -->
+    <!-- ===== INQUIRY CTA ===== -->
     <section class="cta-banner">
         <div class="container">
-            <h2 data-en="Ready to Bring Nature Indoors?" data-zh="准备好将自然带入室内了吗？">Ready to Bring Nature Indoors?</h2>
-            <p data-en="Partner with us to create stunning, sustainable spaces that inspire and endure." data-zh="与我们合作，打造令人惊叹且可持续的空间，既鼓舞人心又经久不衰。">Partner with us to create stunning, sustainable spaces that inspire and endure.</p>
-            <a href="#" class="btn btn-white" data-en="Get in Touch" data-zh="联系我们">Get in Touch</a>
+            <h2 data-en="Inquiries &amp; Quotes" data-zh="查询及报价">Inquiries &amp; Quotes</h2>
+            <p data-en="We'd love to understand your needs and provide tailored products and services." data-zh="我们很乐意了解您的需要，为您度身订造适合的产品和服务。">We'd love to understand your needs and provide tailored products and services.</p>
+            <a href="#" class="btn btn-white" data-en="Contact Us" data-zh="联络我们">Contact Us</a>
         </div>
     </section>
 
-    <!-- ===== FOOTER ===== -->
+<!-- ===== FOOTER ===== -->
     <footer class="footer">
         <div class="container">
             <div class="footer__grid">
@@ -1453,7 +1301,8 @@
         </div>
     </footer>
 
-    <!-- ===== SCRIPTS ===== -->
+    
+<!-- ===== SCRIPTS ===== -->
     <script>
         // --- Language toggle ---
         const langBtn = document.querySelector('.header__lang');
