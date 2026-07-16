@@ -1178,7 +1178,7 @@
     <section class="page-banner">
         <div class="page-banner__bg" style="background: linear-gradient(135deg, rgba(50,55,60,0.85) 0%, rgba(86,54,209,0.7) 100%), url('https://images.unsplash.com/photo-1487700160041-b3ef7e8e9b3b?w=1920&q=80') center/cover no-repeat;"></div>
         <div class="container page-banner__content">
-            <p class="page-banner__breadcrumb" data-en="Home | Artisanal Design | Floral, Plants & Greeneries" data-zh="首页 | 设计及手工艺 | 仿真花卉、植物与绿色植物">Home | Artisanal Design | Floral, Plants & Greeneries</p>
+            <p class="page-banner__breadcrumb" data-en="Products | Artisanal Design | Floral, Plants & Greeneries" data-zh="产品 | 设计及手工艺 | 仿真花卉、植物与绿色植物">Products | Artisanal Design | Floral, Plants & Greeneries</p>
             <h1 class="page-banner__title" data-en="Floral, Plants & Greeneries" data-zh="仿真花卉、植物与绿色植物">Floral, Plants & Greeneries</h1>
         </div>
     </section>
@@ -1302,17 +1302,24 @@
     <script>
         // --- Language toggle ---
         const langBtn = document.querySelector('.header__lang');
-        let currentLang = 'en';
+        let currentLang = localStorage.getItem('ucp-lang') || 'en';
 
-        langBtn.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
+        function applyLang(lang) {
+            currentLang = lang;
             langBtn.innerHTML = currentLang === 'en'
                 ? '<i class="fas fa-globe"></i> EN <i class="fas fa-chevron-down" style="font-size:10px"></i>'
                 : '<i class="fas fa-globe"></i> 中文 <i class="fas fa-chevron-down" style="font-size:10px"></i>';
-
             document.querySelectorAll('[data-en][data-zh]').forEach(el => {
                 el.textContent = el.getAttribute(`data-${currentLang}`);
             });
+            localStorage.setItem('ucp-lang', currentLang);
+        }
+
+        // Restore saved language on page load
+        if (currentLang === 'zh') applyLang('zh');
+
+        langBtn.addEventListener('click', () => {
+            applyLang(currentLang === 'en' ? 'zh' : 'en');
         });
 
         // --- Mobile menu toggle ---

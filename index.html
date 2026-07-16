@@ -1457,17 +1457,24 @@
     <script>
         // --- Language toggle ---
         const langBtn = document.querySelector('.header__lang');
-        let currentLang = 'en';
+        let currentLang = localStorage.getItem('ucp-lang') || 'en';
 
-        langBtn.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
+        function applyLang(lang) {
+            currentLang = lang;
             langBtn.innerHTML = currentLang === 'en'
                 ? '<i class="fas fa-globe"></i> EN <i class="fas fa-chevron-down" style="font-size:10px"></i>'
                 : '<i class="fas fa-globe"></i> 中文 <i class="fas fa-chevron-down" style="font-size:10px"></i>';
-
             document.querySelectorAll('[data-en][data-zh]').forEach(el => {
                 el.textContent = el.getAttribute(`data-${currentLang}`);
             });
+            localStorage.setItem('ucp-lang', currentLang);
+        }
+
+        // Restore saved language on page load
+        if (currentLang === 'zh') applyLang('zh');
+
+        langBtn.addEventListener('click', () => {
+            applyLang(currentLang === 'en' ? 'zh' : 'en');
         });
 
         // --- Mobile menu toggle ---
