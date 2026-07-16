@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCP Group — Bringing Nature Indoors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-dark: #32373c;
+            --color-darker: #1a1d20;
+            --color-purple: #5636d1;
+            --color-magenta: #e2498a;
+            --color-green: #2e7d32;
+            --color-teal: #3d8b7d;
+            --color-cream: #f7f5f0;
+            --color-light-gray: #f4f4f4;
+            --color-white: #ffffff;
+            --color-text: #32373c;
+            --color-text-light: #6b7280;
+            --color-border: #e5e7eb;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+            --container-max: 1280px;
+            --header-height: 80px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background: var(--color-white);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul { list-style: none; }
+
+        img, video {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--color-purple);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #4528b0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(86, 54, 209, 0.35);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--color-purple);
+            border: 2px solid var(--color-purple);
+        }
+        .btn-outline:hover {
+            background: var(--color-purple);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-white {
+            background: #fff;
+            color: var(--color-dark);
+        }
+        .btn-white:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ===== TOP BAR ===== */
+        .topbar {
+            background: var(--color-dark);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            padding: 10px 0;
+            display: none;
+        }
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .topbar__contact { display: flex; gap: 24px; }
+        .topbar__contact span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .topbar__contact i { color: var(--color-magenta); font-size: 12px; }
+        .topbar__social { display: flex; gap: 12px; }
+        .topbar__social a {
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition);
+            font-size: 14px;
+        }
+        .topbar__social a:hover { color: var(--color-magenta); }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--color-white);
+            box-shadow: 0 1px 0 var(--color-border), 0 4px 20px rgba(0, 0, 0, 0.04);
+            height: var(--header-height);
+            transition: box-shadow var(--transition);
+        }
+        .header.scrolled {
+            box-shadow: 0 2px 0 var(--color-border), 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        /* Logo */
+        .header__logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .header__logo img {
+            height: 44px;
+            width: auto;
+        }
+        .logo-text {
+            display: flex;
+            align-items: baseline;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .logo-text .ucp {
+            color: var(--color-magenta);
+            font-family: var(--font-serif);
+            font-weight: 700;
+            font-style: italic;
+            font-size: 28px;
+        }
+        .logo-text .group {
+            color: var(--color-dark);
+            margin-left: 6px;
+            font-weight: 600;
+            font-size: 20px;
+            letter-spacing: 1px;
+        }
+
+        /* Nav */
+        .header__nav { display: flex; align-items: center; }
+        .nav__list {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav__item { position: relative; }
+        .nav__link {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text);
+            border-radius: 6px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .nav__link:hover,
+        .nav__link.active {
+            color: var(--color-purple);
+            background: rgba(86, 54, 209, 0.05);
+        }
+        .nav__link i { font-size: 10px; transition: transform var(--transition); }
+        .nav__item:hover .nav__link i { transform: rotate(180deg); }
+
+        /* Dropdown */
+        .nav__dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            background: var(--color-white);
+            min-width: 220px;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: var(--transition);
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+        .nav__item:hover .nav__dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav__dropdown a {
+            display: block;
+            padding: 12px 20px;
+            font-size: 14px;
+            color: var(--color-text);
+            transition: var(--transition);
+        }
+        .nav__dropdown a:hover {
+            background: rgba(86, 54, 209, 0.05);
+            color: var(--color-purple);
+            padding-left: 24px;
+        }
+
+        /* Header actions */
+        .header__actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header__lang {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid var(--color-border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            background: transparent;
+            color: var(--color-text);
+        }
+        .header__lang:hover { border-color: var(--color-purple); color: var(--color-purple); }
+        .header__lang i { font-size: 14px; }
+
+        .header__search {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid var(--color-border);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: var(--color-text);
+            font-size: 15px;
+        }
+        .header__search:hover {
+            background: var(--color-purple);
+            color: #fff;
+            border-color: var(--color-purple);
+        }
+
+        .header__social {
+            color: var(--color-text);
+            font-size: 16px;
+            transition: var(--transition);
+            padding: 8px;
+        }
+        .header__social:hover { color: var(--color-purple); }
+
+        /* Mobile toggle */
+        .header__toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .header__toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--color-dark);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+        .header__toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .header__toggle.active span:nth-child(2) { opacity: 0; }
+        .header__toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - var(--header-height));
+            min-height: 600px;
+            max-height: 900px;
+            overflow: hidden;
+            background: #000;
+        }
+        .hero__video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.55;
+        }
+        .hero__overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.3) 0%,
+                rgba(0, 0, 0, 0.1) 40%,
+                rgba(0, 0, 0, 0.5) 100%
+            );
+        }
+        .hero__fallback {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 40px;
+        }
+        .hero__quote {
+            font-family: var(--font-serif);
+            font-size: clamp(20px, 3.5vw, 32px);
+            font-style: italic;
+            line-height: 1.5;
+            max-width: 900px;
+            margin-bottom: 36px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+        .hero__cta {
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+        }
+        .hero__scroll {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            color: #fff;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+        }
+        .hero__scroll span { width: 1px; height: 40px; background: rgba(255,255,255,0.4); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* ===== SECTION COMMONS ===== */
+        .section {
+            padding: 100px 0;
+        }
+        .section--cream { background: var(--color-cream); }
+        .section--dark {
+            background: var(--color-dark);
+            color: #fff;
+        }
+        .section--light { background: var(--color-light-gray); }
+
+        .section__header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section__label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--color-purple);
+            margin-bottom: 16px;
+        }
+        .section__title {
+            font-family: var(--font-serif);
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+        .section__title--light { color: #fff; }
+        .section__subtitle {
+            font-size: 16px;
+            color: var(--color-text-light);
+            margin-top: 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .section__subtitle--light { color: rgba(255, 255, 255, 0.7); }
+
+        /* ===== PRODUCT CARDS ===== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .product-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            aspect-ratio: 4/5;
+            cursor: pointer;
+            background: #e0e0e0;
+        }
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+        .product-card__img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .product-card:hover .product-card__img {
+            transform: scale(1.05);
+        }
+        .product-card__overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.7) 0%,
+                rgba(0, 0, 0, 0.1) 50%,
+                transparent 100%
+            );
+        }
+        .product-card__content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 32px 28px;
+            color: #fff;
+        }
+        .product-card__title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .product-card__arrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 8px;
+            transition: var(--transition);
+        }
+        .product-card:hover .product-card__arrow { gap: 12px; }
+
+        /* ===== GLOBAL REACH ===== */
+        .global-reach {
+            text-align: center;
+        }
+        .global-reach__map {
+            max-width: 900px;
+            margin: 0 auto;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+        }
+        .global-reach__stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 800px;
+            margin: 50px auto 0;
+        }
+        .global-stat {
+            text-align: center;
+            padding: 30px;
+        }
+        .global-stat__number {
+            font-family: var(--font-serif);
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--color-purple);
+        }
+        .global-stat__label {
+            font-size: 14px;
+            color: var(--color-text-light);
+            margin-top: 8px;
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            position: relative;
+            overflow: hidden;
+        }
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .testimonial-card {
+            min-width: 100%;
+            padding: 0 60px;
+        }
+        .testimonial-card__inner {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .testimonial-card__logo {
+            height: 50px;
+            margin: 0 auto 30px;
+            opacity: 0.7;
+        }
+        .testimonial-card__quote {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--color-text);
+            margin-bottom: 24px;
+        }
+        .testimonial-card__author {
+            font-weight: 600;
+            color: var(--color-purple);
+        }
+        .testimonial-card__role {
+            font-size: 13px;
+            color: var(--color-text-light);
+        }
+
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 40px;
+        }
+        .testimonial-nav button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--color-border);
+            background: #fff;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: var(--color-text);
+        }
+        .testimonial-nav button:hover {
+            background: var(--color-purple);
+            color: #fff;
+            border-color: var(--color-purple);
+        }
+        .testimonial-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        .testimonial-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-border);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .testimonial-dot.active {
+            background: var(--color-purple);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* ===== IMAGE + TEXT SPLIT ===== */
+        .split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .split--reverse { direction: rtl; }
+        .split--reverse > * { direction: ltr; }
+        .split__image {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+        .split__image img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.6s ease;
+        }
+        .split__image:hover img { transform: scale(1.03); }
+        .split__content h2 {
+            font-family: var(--font-serif);
+            font-size: clamp(26px, 3.5vw, 38px);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .split__content p {
+            font-size: 16px;
+            color: var(--color-text-light);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        /* ===== IMPACT STATS ===== */
+        .impact {
+            position: relative;
+            background: linear-gradient(135deg, #f0e6f6 0%, #fce4ec 50%, #e8f5e9 100%);
+            text-align: center;
+        }
+        .impact__grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .impact-card {
+            padding: 40px 20px;
+            transition: var(--transition);
+            border-radius: 16px;
+        }
+        .impact-card:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: translateY(-4px);
+        }
+        .impact-card__icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            font-size: 36px;
+        }
+        .impact-card__number {
+            font-family: var(--font-serif);
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+        .impact-card__label {
+            font-size: 14px;
+            color: var(--color-text-light);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* ===== VIDEO CARDS ===== */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .video-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: var(--transition);
+        }
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+        .video-card__thumb {
+            position: relative;
+            aspect-ratio: 16/10;
+            background: #e0e0e0;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .video-card__thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-card__play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.25);
+            transition: var(--transition);
+        }
+        .video-card__play span {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--color-purple);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: var(--transition);
+        }
+        .video-card:hover .video-card__play span {
+            background: var(--color-magenta);
+            transform: scale(1.1);
+        }
+        .video-card__info {
+            padding: 20px 24px;
+        }
+        .video-card__name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .video-card__title {
+            font-size: 13px;
+            color: var(--color-text-light);
+            margin-top: 4px;
+        }
+
+        /* ===== CTA BANNER ===== */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--color-purple) 0%, #6c3fd4 50%, var(--color-magenta) 100%);
+            color: #fff;
+            text-align: center;
+            padding: 80px 0;
+        }
+        .cta-banner h2 {
+            font-family: var(--font-serif);
+            font-size: clamp(28px, 4vw, 40px);
+            margin-bottom: 16px;
+        }
+        .cta-banner p {
+            font-size: 16px;
+            opacity: 0.85;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--color-darker);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 70px 0 0;
+        }
+        .footer__grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        .footer__brand p {
+            margin-top: 16px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .footer__logo {
+            display: flex;
+            align-items: baseline;
+        }
+        .footer__logo .ucp {
+            color: var(--color-magenta);
+            font-family: var(--font-serif);
+            font-weight: 700;
+            font-style: italic;
+            font-size: 26px;
+        }
+        .footer__logo .group {
+            color: #fff;
+            margin-left: 5px;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        .footer h4 {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .footer__links li { margin-bottom: 10px; }
+        .footer__links a {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: var(--transition);
+        }
+        .footer__links a:hover {
+            color: var(--color-magenta);
+            padding-left: 4px;
+        }
+        .footer__address {
+            font-size: 13px;
+            line-height: 1.8;
+        }
+        .footer__address strong {
+            color: #fff;
+            display: block;
+            margin-top: 16px;
+        }
+        .footer__address strong:first-child { margin-top: 0; }
+        .footer__bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+        .footer__social {
+            display: flex;
+            gap: 12px;
+        }
+        .footer__social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+        .footer__social a:hover {
+            background: var(--color-magenta);
+            border-color: var(--color-magenta);
+            color: #fff;
+        }
+
+        /* ===== MODAL / SEARCH OVERLAY ===== */
+        .search-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 150px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .search-overlay__box {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: translateY(-20px);
+            transition: var(--transition);
+        }
+        .search-overlay.active .search-overlay__box {
+            transform: translateY(0);
+        }
+        .search-overlay__input {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid var(--color-border);
+            padding: 14px 0;
+            font-size: 18px;
+            outline: none;
+            font-family: var(--font-sans);
+        }
+        .search-overlay__input:focus { border-bottom-color: var(--color-purple); }
+        .search-overlay__close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .search-overlay__close:hover { color: var(--color-magenta); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .container { padding: 0 24px; }
+            .nav__list { gap: 0; }
+            .nav__link { padding: 10px 12px; font-size: 13px; }
+            .products-grid { gap: 20px; }
+            .impact__grid { grid-template-columns: repeat(2, 1fr); }
+            .videos-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer__grid { grid-template-columns: 1fr 1fr; }
+            .split { gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            :root { --header-height: 64px; }
+            .section { padding: 60px 0; }
+            .container { padding: 0 20px; }
+
+            /* Mobile nav */
+            .header__nav {
+                position: fixed;
+                top: var(--header-height);
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: #fff;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+                transform: translateX(100%);
+                transition: transform 0.4s ease;
+                overflow-y: auto;
+                z-index: 999;
+            }
+            .header__nav.open { transform: translateX(0); }
+            .nav__list {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                gap: 4px;
+            }
+            .nav__link {
+                padding: 14px 16px;
+                font-size: 16px;
+                justify-content: space-between;
+            }
+            .nav__dropdown {
+                position: static;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                background: var(--color-light-gray);
+                display: none;
+                margin: 0 16px;
+                border-radius: 8px;
+            }
+            .nav__item.open .nav__dropdown { display: block; }
+            .header__toggle { display: flex; }
+            .header__actions { display: none; }
+
+            .products-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .split { grid-template-columns: 1fr; gap: 30px; }
+            .global-reach__stats { grid-template-columns: 1fr; }
+            .impact__grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+            .videos-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .footer__grid { grid-template-columns: 1fr; gap: 30px; }
+            .footer__bottom { flex-direction: column; gap: 16px; text-align: center; }
+            .hero { height: 70vh; min-height: 450px; }
+            .hero__quote { font-size: 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .impact__grid { grid-template-columns: 1fr; max-width: 280px; margin: 0 auto; }
+            .impact-card__number { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
+        <div class="container">
+            <!-- Logo -->
+            <a href="#" class="header__logo">
+                <span class="logo-text">
+                    <span class="ucp">UCP</span>
+                    <span class="group">GROUP</span>
+                </span>
+            </a>
+
+            <!-- Navigation -->
+            <nav class="header__nav" id="mainNav">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">UCP Group <i class="fas fa-chevron-down"></i></a>
+                        <div class="nav__dropdown">
+                            <a href="#">About Us</a>
+                            <a href="#">Social Contribution</a>
+                            <a href="#">Global Footprint</a>
+                        </div>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">Products &amp; Services <i class="fas fa-chevron-down"></i></a>
+                        <div class="nav__dropdown">
+                            <a href="#">Artisanal Design</a>
+                            <a href="#">Floral, Plants &amp; Greeneries</a>
+                            <a href="#">Home Décor Accents</a>
+                            <a href="#">Seasonal &amp; Festive Décor</a>
+                        </div>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">Sustainability &amp; Innovation <i class="fas fa-chevron-down"></i></a>
+                        <div class="nav__dropdown">
+                            <a href="#">Our Breakthroughs</a>
+                            <a href="#">Climate Change</a>
+                            <a href="#">Sustainable Materials</a>
+                            <a href="#">Green Manufacturing</a>
+                        </div>
+                    </li>
+                    <li class="nav__item"><a href="#" class="nav__link">Careers</a></li>
+                    <li class="nav__item"><a href="#" class="nav__link">Newsroom</a></li>
+                    <li class="nav__item"><a href="#" class="nav__link">Contact Us</a></li>
+                </ul>
+            </nav>
+
+            <!-- Actions -->
+            <div class="header__actions">
+                <button class="header__lang" aria-label="Language">
+                    <i class="fas fa-globe"></i> EN <i class="fas fa-chevron-down" style="font-size:10px"></i>
+                </button>
+                <button class="header__search" id="searchBtn" aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="https://linkedin.com" class="header__social" aria-label="LinkedIn" target="_blank" rel="noopener">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+
+            <!-- Mobile toggle -->
+            <button class="header__toggle" id="mobileToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== SEARCH OVERLAY ===== -->
+    <div class="search-overlay" id="searchOverlay">
+        <button class="search-overlay__close" id="searchClose">&times;</button>
+        <div class="search-overlay__box">
+            <input type="text" class="search-overlay__input" placeholder="Search UCP Group..." autofocus>
+        </div>
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+        <!-- Fallback image (shown if video doesn't load) -->
+        <img
+            class="hero__fallback"
+            src="https://images.unsplash.com/photo-1487700160041-b3ef7e8e9b3b?w=1920&q=80"
+            alt="Artificial botanical products"
+            loading="eager"
+        >
+        <!-- Video background: replace with actual UCP video -->
+        <video class="hero__video" autoplay loop muted playsinline
+               poster="https://images.unsplash.com/photo-1487700160041-b3ef7e8e9b3b?w=1920&q=80">
+            <source src="https://ucpgroup1.wpengine.com/wp-content/uploads/2022/12/UCP-banner_v4.2_resize.mp4" type="video/mp4">
+        </video>
+        <div class="hero__overlay"></div>
+        <div class="hero__content">
+            <p class="hero__quote">
+                "Bringing more than 60 years of family values and experiences in the artificial
+                botanical industry, we focus on craftsmanship, innovation, and premium quality
+                artificial floral and home decoration products. Our commitment is to our people,
+                our communities, and our planet."
+            </p>
+            <div class="hero__cta">
+                <a href="#products" class="btn btn-white">Explore Our Products</a>
+            </div>
+        </div>
+        <div class="hero__scroll">
+            SCROLL<span></span>
+        </div>
+    </section>
+
+    <!-- ===== PRODUCTS SECTION ===== -->
+    <section class="section section--cream" id="products">
+        <div class="container">
+            <div class="section__header">
+                <p class="section__label">Our Products</p>
+                <h2 class="section__title">Designed and Made with<br>Sustainability in Mind</h2>
+                <p class="section__subtitle">
+                    Never one to rest on its laurels, UCP has evolved from a family business into
+                    a global leader in the artificial botanical industry.
+                </p>
+            </div>
+
+            <div class="products-grid">
+                <div class="product-card">
+                    <img class="product-card__img" src="https://images.unsplash.com/photo-1487700160041-b3ef7e8e9b3b?w=600&q=80" alt="Floral, Plants & Greeneries" loading="lazy">
+                    <div class="product-card__overlay"></div>
+                    <div class="product-card__content">
+                        <h3 class="product-card__title">Floral, Plants &amp; Greeneries</h3>
+                        <span class="product-card__arrow">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img class="product-card__img" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80" alt="Home Décor Accents" loading="lazy">
+                    <div class="product-card__overlay"></div>
+                    <div class="product-card__content">
+                        <h3 class="product-card__title">Home Décor Accents</h3>
+                        <span class="product-card__arrow">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img class="product-card__img" src="https://images.unsplash.com/photo-1606761568499-6d2451b07266?w=600&q=80" alt="Seasonal & Festive Décor" loading="lazy">
+                    <div class="product-card__overlay"></div>
+                    <div class="product-card__content">
+                        <h3 class="product-card__title">Seasonal &amp; Festive Décor</h3>
+                        <span class="product-card__arrow">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== GLOBAL REACH ===== -->
+    <section class="section">
+        <div class="container global-reach">
+            <div class="section__header">
+                <p class="section__label">Global Presence</p>
+                <h2 class="section__title">Our Global Reach</h2>
+            </div>
+            <img
+                class="global-reach__map"
+                src="https://ucpgroup.com/wp-content/uploads/2022/10/homepage_world-map-e1667117172667.png"
+                alt="World map showing UCP global footprint"
+                loading="lazy"
+            >
+            <div class="global-reach__stats">
+                <div class="global-stat">
+                    <div class="global-stat__number">60+</div>
+                    <p class="global-stat__label">Countries Served</p>
+                </div>
+                <div class="global-stat">
+                    <div class="global-stat__number">5</div>
+                    <p class="global-stat__label">Manufacturing Facilities</p>
+                </div>
+                <div class="global-stat">
+                    <div class="global-stat__number">1,200+</div>
+                    <p class="global-stat__label">Patents &amp; Designs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="section section--light testimonials" id="testimonials">
+        <div class="container">
+            <div class="section__header">
+                <p class="section__label">Testimonials</p>
+                <h2 class="section__title">Our Partner's Testimonial</h2>
+            </div>
+
+            <div class="testimonial-track" id="testimonialTrack">
+                <div class="testimonial-card">
+                    <div class="testimonial-card__inner">
+                        <img class="testimonial-card__logo" src="https://ucpgroup.com/wp-content/uploads/2022/12/VIDHAYAKOM_logo-1.png" alt="Vidhayakom" loading="lazy">
+                        <blockquote class="testimonial-card__quote">
+                            "UCP's dedication to quality and sustainability is unmatched. Their
+                            artificial botanicals have transformed our retail spaces and delighted
+                            our customers across Southeast Asia."
+                        </blockquote>
+                        <p class="testimonial-card__author">Eddie Togo</p>
+                        <p class="testimonial-card__role">Managing Director, Vidhayakom</p>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-card__inner">
+                        <img class="testimonial-card__logo" src="https://ucpgroup.com/wp-content/uploads/2022/12/VIDHAYAKOM_logo-1.png" alt="Partner" loading="lazy">
+                        <blockquote class="testimonial-card__quote">
+                            "Working with UCP Group has been an exceptional experience. Their
+                            innovative approach to sustainable materials sets them apart in the
+                            industry."
+                        </blockquote>
+                        <p class="testimonial-card__author">Sarah Chen</p>
+                        <p class="testimonial-card__role">CEO, GreenLiving International</p>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-card__inner">
+                        <img class="testimonial-card__logo" src="https://ucpgroup.com/wp-content/uploads/2022/12/VIDHAYAKOM_logo-1.png" alt="Partner" loading="lazy">
+                        <blockquote class="testimonial-card__quote">
+                            "The craftsmanship and attention to detail in UCP's products is
+                            extraordinary. They are truly the gold standard in artificial
+                            botanicals."
+                        </blockquote>
+                        <p class="testimonial-card__author">Michael Reeves</p>
+                        <p class="testimonial-card__role">Creative Director, Bloom &amp; Ivy</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-nav">
+                <button id="testimonialPrev" aria-label="Previous"><i class="fas fa-arrow-left"></i></button>
+                <button id="testimonialNext" aria-label="Next"><i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="testimonial-dots" id="testimonialDots"></div>
+        </div>
+    </section>
+
+    <!-- ===== ECO-FRIENDLY SECTION ===== -->
+    <section class="section">
+        <div class="container">
+            <div class="split">
+                <div class="split__image">
+                    <img src="https://images.unsplash.com/photo-1520412099551-62b6bafeb5e9?w=800&q=80" alt="Eco-friendly products" loading="lazy">
+                </div>
+                <div class="split__content">
+                    <h2>Our Eco-Friendly Products</h2>
+                    <p>
+                        We are committed to creating beautiful, durable artificial botanicals
+                        that minimize environmental impact. From recycled materials to
+                        biodegradable packaging, every product is designed with the planet in mind.
+                    </p>
+                    <p>
+                        Our research and development team continuously innovates to reduce our
+                        carbon footprint while maintaining the premium quality our customers expect.
+                    </p>
+                    <a href="#" class="btn btn-primary">Discover More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SUSTAINABILITY JOURNEY ===== -->
+    <section class="section section--cream">
+        <div class="container">
+            <div class="split split--reverse">
+                <div class="split__image">
+                    <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80" alt="Sustainability journey" loading="lazy">
+                </div>
+                <div class="split__content">
+                    <h2>Our Sustainability &amp; Innovation Journey</h2>
+                    <p>
+                        For over six decades, we have pioneered sustainable practices in the
+                        artificial botanical industry. Our journey is defined by continuous
+                        improvement, breakthrough innovations, and an unwavering commitment
+                        to environmental stewardship.
+                    </p>
+                    <p>
+                        We are proud to lead the industry toward a greener, more sustainable future
+                        for generations to come.
+                    </p>
+                    <a href="#" class="btn btn-outline">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== IMPACT STATS ===== -->
+    <section class="section impact">
+        <div class="container">
+            <div class="section__header">
+                <p class="section__label">Our Impact</p>
+                <h2 class="section__title">Making a Difference</h2>
+            </div>
+
+            <div class="impact__grid">
+                <div class="impact-card">
+                    <div class="impact-card__icon">🌍</div>
+                    <div class="impact-card__number">2%</div>
+                    <p class="impact-card__label">of annual profits donated<br>to social causes</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-card__icon">♻️</div>
+                    <div class="impact-card__number">137,000+</div>
+                    <p class="impact-card__label">kg of plastic wrap<br>eliminated annually</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-card__icon">🫙</div>
+                    <div class="impact-card__number">10M+</div>
+                    <p class="impact-card__label">recycled plastic bottles<br>used in production</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-card__icon">👥</div>
+                    <div class="impact-card__number">2,000+</div>
+                    <p class="impact-card__label">team members<br>worldwide</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PEOPLE OF UCP ===== -->
+    <section class="section section--light" id="people">
+        <div class="container">
+            <div class="section__header">
+                <p class="section__label">Our People</p>
+                <h2 class="section__title">People of UCP</h2>
+                <p class="section__subtitle">
+                    Hear from the talented individuals who bring our vision to life every day.
+                </p>
+            </div>
+
+            <div class="videos-grid">
+                <div class="video-card">
+                    <div class="video-card__thumb" onclick="this.querySelector('video').play(); this.querySelector('.video-card__play').style.display='none'">
+                        <img src="https://ucpgroup.com/wp-content/uploads/2022/12/Thumbnail-Jennifer-Chow-Eng.jpg" alt="Jennifer Chow" loading="lazy">
+                        <div class="video-card__play"><span><i class="fas fa-play"></i></span></div>
+                    </div>
+                    <div class="video-card__info">
+                        <p class="video-card__name">Jennifer Chow</p>
+                        <p class="video-card__title">Senior Designer</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-card__thumb" onclick="this.querySelector('video').play(); this.querySelector('.video-card__play').style.display='none'">
+                        <img src="https://ucpgroup.com/wp-content/uploads/2022/12/Thumbnail-Michael-Kwan-Eng.jpg" alt="Michael Kwan" loading="lazy">
+                        <div class="video-card__play"><span><i class="fas fa-play"></i></span></div>
+                    </div>
+                    <div class="video-card__info">
+                        <p class="video-card__name">Michael Kwan</p>
+                        <p class="video-card__title">Production Manager</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-card__thumb" onclick="this.querySelector('video').play(); this.querySelector('.video-card__play').style.display='none'">
+                        <img src="https://ucpgroup.com/wp-content/uploads/2023/09/Marc-Bass-eng-sub.jpg" alt="Marc Bass" loading="lazy">
+                        <div class="video-card__play"><span><i class="fas fa-play"></i></span></div>
+                    </div>
+                    <div class="video-card__info">
+                        <p class="video-card__name">Marc Bass</p>
+                        <p class="video-card__title">Sustainability Lead</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA BANNER ===== -->
+    <section class="cta-banner">
+        <div class="container">
+            <h2>Ready to Bring Nature Indoors?</h2>
+            <p>Partner with us to create stunning, sustainable spaces that inspire and endure.</p>
+            <a href="#" class="btn btn-white">Get in Touch</a>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <!-- Brand -->
+                <div class="footer__brand">
+                    <div class="footer__logo">
+                        <span class="ucp">UCP</span><span class="group">GROUP</span>
+                    </div>
+                    <p>
+                        Bringing more than 60 years of craftsmanship and innovation to the
+                        artificial botanical industry. Premium quality, sustainably made.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4>Quick Links</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Products &amp; Services</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- More Links -->
+                <div>
+                    <h4>Resources</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Newsroom</a></li>
+                        <li><a href="#">Global Footprint</a></li>
+                        <li><a href="#">Social Contribution</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                    </ul>
+                </div>
+
+                <!-- Addresses -->
+                <div>
+                    <h4>Contact</h4>
+                    <div class="footer__address">
+                        <strong>Hong Kong SAR Headquarters</strong>
+                        Block C, 3/F, Eldex Industrial Building,<br>
+                        21 Ma Tau Wai Road, Hung Hom,<br>
+                        Kowloon, Hong Kong<br>
+                        Tel: +852 2765-3100
+
+                        <strong>China Headquarters</strong>
+                        38 Hua Tai Road, Dachong Town,<br>
+                        Zhongshan, Guangdong, China<br>
+                        Tel: +86 760-8772-6286
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p>&copy; 2026 UCP Group. All rights reserved.</p>
+                <div class="footer__social">
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script>
+        // --- Mobile menu toggle ---
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            mainNav.classList.toggle('open');
+        });
+
+        // Mobile dropdown toggles
+        document.querySelectorAll('.nav__link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    const item = link.parentElement;
+                    const dropdown = item.querySelector('.nav__dropdown');
+                    if (dropdown) {
+                        e.preventDefault();
+                        item.classList.toggle('open');
+                    }
+                }
+            });
+        });
+
+        // --- Header scroll effect ---
+        const header = document.getElementById('header');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // --- Search overlay ---
+        const searchBtn = document.getElementById('searchBtn');
+        const searchOverlay = document.getElementById('searchOverlay');
+        const searchClose = document.getElementById('searchClose');
+
+        searchBtn.addEventListener('click', () => {
+            searchOverlay.classList.add('active');
+            searchOverlay.querySelector('input').focus();
+        });
+
+        searchClose.addEventListener('click', () => {
+            searchOverlay.classList.remove('active');
+        });
+
+        searchOverlay.addEventListener('click', (e) => {
+            if (e.target === searchOverlay) searchOverlay.classList.remove('active');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') searchOverlay.classList.remove('active');
+        });
+
+        // --- Testimonial carousel ---
+        const track = document.getElementById('testimonialTrack');
+        const prevBtn = document.getElementById('testimonialPrev');
+        const nextBtn = document.getElementById('testimonialNext');
+        const dotsContainer = document.getElementById('testimonialDots');
+        const cards = document.querySelectorAll('.testimonial-card');
+        let currentSlide = 0;
+        const totalSlides = cards.length;
+
+        // Create dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.classList.add('testimonial-dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+
+        function goToSlide(index) {
+            currentSlide = (index + totalSlides) % totalSlides;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.querySelectorAll('.testimonial-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+        // Auto-play testimonials
+        setInterval(() => goToSlide(currentSlide + 1), 5000);
+
+        // --- Intersection Observer for animations ---
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-card, .impact-card, .video-card, .split__image, .split__content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
