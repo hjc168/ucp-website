@@ -1046,7 +1046,7 @@
         /* ===== PAGE BANNER ===== */
         .page-banner {
             position: relative;
-            height: 400px;
+            height: 350px;
             display: flex;
             align-items: center;
             overflow: hidden;
@@ -1075,112 +1075,99 @@
             font-weight: 600;
             letter-spacing: -0.5px;
         }
-        .products-grid a.product-card {
+        /* ===== CONTACT LAYOUT ===== */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+        .contact-form__group {
+            margin-bottom: 24px;
+        }
+        .contact-form__label {
             display: block;
-        }
-        /* ===== GALLERY ===== */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-        .gallery-item {
-            border-radius: 12px;
-            overflow: hidden;
-            aspect-ratio: 1;
-            background: #e0e0e0;
-            transition: var(--transition);
-        }
-        .gallery-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        .gallery-item:hover img { transform: scale(1.08); }
-        /* ===== SUSTAINABILITY CARDS ===== */
-        .sustainability-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-        .sus-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            transition: var(--transition);
-            text-decoration: none;
-            color: inherit;
-        }
-        .sus-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-            color: var(--color-purple);
-        }
-        .sus-card__icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        .sus-card__title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        .sus-card__desc {
-            font-size: 14px;
-            color: var(--color-text-light);
-            line-height: 1.6;
-        }
-        .sus-card__arrow {
-            display: inline-block;
-            margin-top: 16px;
             font-size: 13px;
             font-weight: 600;
-            text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--color-purple);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: var(--color-text);
         }
-        /* ===== INNOVATION ICONS GRID ===== */
-        .innovation-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-            text-align: center;
+        .contact-form__label .required {
+            color: var(--color-magenta);
         }
-        .innovation-item {
-            padding: 30px 20px;
+        .contact-form__input,
+        .contact-form__textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: var(--font-sans);
             transition: var(--transition);
-            border-radius: 12px;
-        }
-        .innovation-item:hover {
             background: #fff;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
         }
-        .innovation-item__icon {
-            font-size: 44px;
-            margin-bottom: 16px;
+        .contact-form__input:focus,
+        .contact-form__textarea:focus {
+            outline: none;
+            border-color: var(--color-purple);
+            box-shadow: 0 0 0 3px rgba(86, 54, 209, 0.1);
         }
-        .innovation-item__title {
+        .contact-form__textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .contact-form__submit {
+            width: 100%;
+            padding: 16px 32px;
+            background: var(--color-purple);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: 600;
-            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
         }
-        @media (max-width: 1024px) {
-            .sustainability-cards { grid-template-columns: repeat(2, 1fr); }
-            .innovation-grid { grid-template-columns: repeat(2, 1fr); }
+        .contact-form__submit:hover {
+            background: #4528b0;
+            box-shadow: 0 8px 25px rgba(86, 54, 209, 0.3);
+        }
+        /* ===== CONTACT INFO ===== */
+        .contact-info-card {
+            background: var(--color-cream);
+            border-radius: 16px;
+            padding: 40px;
+        }
+        .contact-info-card h3 {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .contact-info__item {
+            margin-bottom: 30px;
+        }
+        .contact-info__item strong {
+            display: block;
+            font-size: 15px;
+            color: var(--color-dark);
+            margin-bottom: 8px;
+        }
+        .contact-info__item p {
+            font-size: 14px;
+            color: var(--color-text-light);
+            line-height: 1.7;
+        }
+        .contact-info__item i {
+            color: var(--color-purple);
+            width: 20px;
+            margin-right: 8px;
         }
         @media (max-width: 768px) {
-            .page-banner { height: 280px; }
-            .sustainability-cards { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-            .innovation-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        }
-        @media (max-width: 480px) {
-            .innovation-grid { grid-template-columns: 1fr; }
+            .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+            .page-banner { height: 240px; }
         }
 
     </style>
@@ -1212,7 +1199,7 @@
                             <a href="green-manufacturing.html" data-en="Green Manufacturing" data-zh="绿色生产">Green Manufacturing</a>
                         </div>
                     </li>
-                    <li class="nav__item"><a href="contact-us.html" class="nav__link" data-en="Contact Us" data-zh="联系我们">Contact Us</a></li>
+                    <li class="nav__item"><a href="#" class="nav__link" data-en="Contact Us" data-zh="联系我们">Contact Us</a></li>
                     <li class="nav__item"><a href="#" class="nav__link" data-en="About Us" data-zh="关于我们">About Us</a></li>
                 </ul>
             </nav>
@@ -1249,66 +1236,86 @@
 
     <!-- ===== PAGE BANNER ===== -->
     <section class="page-banner">
-        <div class="page-banner__bg" style="background: linear-gradient(135deg, rgba(50,55,60,0.85) 0%, rgba(46,125,50,0.7) 100%), url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1920&q=80') center/cover no-repeat;"></div>
+        <div class="page-banner__bg" style="background: linear-gradient(135deg, rgba(50,55,60,0.85) 0%, rgba(86,54,209,0.65) 100%), url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1920&q=80') center/cover no-repeat;"></div>
         <div class="container page-banner__content">
-            <p class="page-banner__breadcrumb" data-en="Home | Sustainability & Innovation | Climate Change" data-zh="首页 | 可持续发展与创新 | 气候变化">Home | Sustainability & Innovation | Climate Change</p>
-            <h1 class="page-banner__title" data-en="Climate Change" data-zh="气候变化">Climate Change</h1>
+            <p class="page-banner__breadcrumb" data-en="Home | Contact Us" data-zh="首页 | 联络我们">Home | Contact Us</p>
+            <h1 class="page-banner__title" data-en="Contact Us" data-zh="联络我们">Contact Us</h1>
         </div>
     </section>
 
-    <!-- ===== COMMITMENT ===== -->
+    <!-- ===== CONTACT SECTION ===== -->
     <section class="section">
         <div class="container">
-            <div class="split">
-                <div class="split__content">
-                    <h2 data-en="Our Climate Commitment" data-zh="我们的气候承诺">Our Climate Commitment</h2>
-                    <p data-en="We reduce greenhouse gas (GHG) emissions by improving energy efficiency, increasing the use of renewable energy, and driving energy-saving habits across all our operations and facilities." data-zh="我们通过提高能源效率、增加可再生能源的使用，以及在所有运营和设施中推动节能习惯来减少温室气体（GHG）排放。">
-                        We reduce greenhouse gas (GHG) emissions by improving energy efficiency, increasing the use of renewable energy, and driving energy-saving habits across all our operations and facilities.
-                    </p>
-                    <p data-en="Climate action is a core pillar of our sustainability strategy. We track, measure, and continuously improve our carbon footprint across our entire value chain." data-zh="气候行动是我们可持续发展战略的核心支柱。我们跟踪、测量并持续改善整个价值链中的碳足迹。">
-                        Climate action is a core pillar of our sustainability strategy. We track, measure, and continuously improve our carbon footprint across our entire value chain.
-                    </p>
+            <div class="contact-layout">
+                <!-- Form -->
+                <div>
+                    <form class="contact-form" onsubmit="alert('Thank you for your message. We will get back to you soon.\\n\\n谢谢您的留言，我们会尽快回复。'); return false;">
+                        <div class="contact-form__group">
+                            <label class="contact-form__label" data-en="Name" data-zh="姓名">Name <span class="required">*</span></label>
+                            <input type="text" class="contact-form__input" required data-en-placeholder="Your name" data-zh-placeholder="您的姓名" placeholder="Your name">
+                        </div>
+                        <div class="contact-form__group">
+                            <label class="contact-form__label" data-en="Email" data-zh="电子邮件">Email <span class="required">*</span></label>
+                            <input type="email" class="contact-form__input" required data-en-placeholder="your@email.com" data-zh-placeholder="您的邮箱" placeholder="your@email.com">
+                        </div>
+                        <div class="contact-form__group">
+                            <label class="contact-form__label" data-en="Subject" data-zh="主题">Subject</label>
+                            <input type="text" class="contact-form__input" data-en-placeholder="How can we help?" data-zh-placeholder="我们能帮什么？" placeholder="How can we help?">
+                        </div>
+                        <div class="contact-form__group">
+                            <label class="contact-form__label" data-en="Message" data-zh="信息">Message</label>
+                            <textarea class="contact-form__textarea" data-en-placeholder="Tell us about your inquiry..." data-zh-placeholder="请描述您的查询..." placeholder="Tell us about your inquiry..."></textarea>
+                        </div>
+                        <button type="submit" class="contact-form__submit" data-en="Submit" data-zh="提交">Submit</button>
+                    </form>
                 </div>
-                <div class="split__image">
-                    <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80" alt="Climate Change" loading="lazy">
+
+                <!-- Contact Info -->
+                <div>
+                    <div class="contact-info-card">
+                        <h3 data-en="Get In Touch" data-zh="联系我们">Get In Touch</h3>
+
+                        <div class="contact-info__item">
+                            <strong data-en="Hong Kong SAR Headquarters" data-zh="中国香港总部">Hong Kong SAR Headquarters</strong>
+                            <p>
+                                Block C, 3/F, Eldex Industrial Building,<br>
+                                21 Ma Tau Wai Road, Hung Hom,<br>
+                                Kowloon, Hong Kong
+                            </p>
+                            <p style="margin-top:8px;">
+                                <i class="fas fa-phone-alt"></i> +852 2765-3100
+                            </p>
+                        </div>
+
+                        <div class="contact-info__item">
+                            <strong data-en="China Headquarters" data-zh="中国总部">China Headquarters</strong>
+                            <p>
+                                38 Hua Tai Road, Dachong Town,<br>
+                                Zhongshan, Guangdong, China
+                            </p>
+                            <p style="margin-top:8px;">
+                                <i class="fas fa-phone-alt"></i> +86 760-8772-6286
+                            </p>
+                        </div>
+
+                        <div class="contact-info__item">
+                            <strong data-en="General Enquiries" data-zh="一般查询">General Enquiries</strong>
+                            <p>
+                                <i class="fas fa-envelope"></i> enquiry@wahtatltd.com
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== KEY ACTIONS ===== -->
-    <section class="section section--cream">
-        <div class="container">
-            <div class="section__header">
-                <h2 class="section__title" data-en="Our Key Actions" data-zh="我们的关键行动">Our Key Actions</h2>
-            </div>
-            <div class="innovation-grid">
-                <div class="innovation-item">
-                    <div class="innovation-item__icon">☀️</div>
-                    <h3 class="innovation-item__title" data-en="Renewable Energy" data-zh="可再生能源">Renewable Energy</h3>
-                </div>
-                <div class="innovation-item">
-                    <div class="innovation-item__icon">💡</div>
-                    <h3 class="innovation-item__title" data-en="Energy Efficiency" data-zh="能源效率">Energy Efficiency</h3>
-                </div>
-                <div class="innovation-item">
-                    <div class="innovation-item__icon">📊</div>
-                    <h3 class="innovation-item__title" data-en="Carbon Tracking" data-zh="碳追踪">Carbon Tracking</h3>
-                </div>
-                <div class="innovation-item">
-                    <div class="innovation-item__icon">🌱</div>
-                    <h3 class="innovation-item__title" data-en="Emission Reduction" data-zh="减排">Emission Reduction</h3>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== CTA ===== -->
+    <!-- ===== MAP / CTA ===== -->
     <section class="cta-banner">
         <div class="container">
-            <h2 data-en="Together for a Cooler Planet" data-zh="共同守护清凉地球">Together for a Cooler Planet</h2>
-            <p data-en="Every action counts. Learn more about how we're reducing our environmental impact." data-zh="每一个行动都很重要。了解更多关于我们如何减少环境影响的信息。">Every action counts. Learn more about how we're reducing our environmental impact.</p>
-            <a href="sustainability.html" class="btn btn-white" data-en="Back to Sustainability" data-zh="返回可持续发展">Back to Sustainability</a>
+            <h2 data-en="Let's Work Together" data-zh="携手合作">Let's Work Together</h2>
+            <p data-en="We look forward to hearing from you and exploring how we can collaborate." data-zh="我们期待您的来信，共同探索合作机会。">We look forward to hearing from you and exploring how we can collaborate.</p>
+            <a href="products.html" class="btn btn-white" data-en="Explore Products" data-zh="浏览产品">Explore Products</a>
         </div>
     </section>
 
