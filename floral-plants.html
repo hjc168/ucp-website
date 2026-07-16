@@ -1310,7 +1310,17 @@
                 ? '<i class="fas fa-globe"></i> EN <i class="fas fa-chevron-down" style="font-size:10px"></i>'
                 : '<i class="fas fa-globe"></i> 中文 <i class="fas fa-chevron-down" style="font-size:10px"></i>';
             document.querySelectorAll('[data-en][data-zh]').forEach(el => {
-                el.textContent = el.getAttribute(`data-${currentLang}`);
+                const newText = el.getAttribute(`data-${currentLang}`);
+                if (el.children.length === 0) {
+                    el.textContent = newText;
+                } else {
+                    for (const node of el.childNodes) {
+                        if (node.nodeType === Node.TEXT_NODE) {
+                            node.textContent = newText;
+                            break;
+                        }
+                    }
+                }
             });
             localStorage.setItem('ucp-lang', currentLang);
         }
