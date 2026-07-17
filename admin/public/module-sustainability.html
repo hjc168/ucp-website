@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainability — Wah Tat Plant Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="admin-layout">
+
+<aside class="sidebar">
+    <div class="sidebar__brand">
+        <i class="fas fa-leaf" style="color:var(--admin-accent);font-size:20px;"></i>
+        <span style="color:#fff;font-weight:700;margin-left:8px;">Wah Tat Admin</span>
+    </div>
+    <nav class="sidebar__nav">
+        <a href="dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
+        <div class="sidebar__section">Modules</div>
+        <a href="module-home.html"><i class="fas fa-home"></i> <span>Home</span></a>
+        <a href="module-products.html"><i class="fas fa-box"></i> <span>Products</span></a>
+        <a href="module-sustainability.html" class="active"><i class="fas fa-leaf"></i> <span>Sustainability</span></a>
+        <a href="module-contact.html"><i class="fas fa-envelope"></i> <span>Contact Us</span></a>
+        <a href="module-about.html"><i class="fas fa-info-circle"></i> <span>About Us</span></a>
+        <div class="sidebar__section">Media</div>
+        <a href="images.html"><i class="fas fa-images"></i> <span>Image Library</span></a>
+    </nav>
+    <div class="sidebar__footer">
+        <a href="#" onclick="logout();return false" style="color:rgba(255,255,255,0.5);">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</aside>
+
+<main class="main-content">
+    <div class="topbar">
+        <h2><i class="fas fa-leaf"></i> Sustainability</h2>
+        <div class="topbar__user">
+            <span>Hi,</span> <strong id="usernameDisplay">...</strong>
+            <button class="btn btn-primary btn-sm" onclick="saveAll()"><i class="fas fa-save"></i> Save All</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card__header">
+            <h3>Editable Content</h3>
+            <span style="font-size:12px;color:var(--admin-text-light);">Changes are written directly to HTML files</span>
+        </div>
+        <div class="content-form" id="contentForm">
+            <p style="color:var(--admin-text-light);padding:20px;text-align:center;">Loading content...</p>
+        </div>
+    </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/admin.js"></script>
+<script>
+const MODULE = 'sustainability';
+
+(async () => {
+    if (!await checkAuth()) return;
+    loadContent();
+})();
+
+async function loadContent() {
+    const form = document.getElementById('contentForm');
+    try {
+        const data = await apiGet(`/api/content/${MODULE}`);
+        if (!data || !data.items || data.items.length === 0) {
+            form.innerHTML = '<p style="color:var(--admin-text-light);padding:20px;text-align:center;">No editable content found for this module.</p>';
+            return;
+        }
+
+        form.innerHTML = data.items.map(item => `
+            <div class="content-item" data-key="${item.key}">
+                <div class="content-item__label">${item.label}</div>
+                <div class="content-item__meta">${item.file} &rarr; ${item.selector}</div>
+                <div class="lang-row">
+                    <div>
+                        <label>English (EN)</label>
+                        <textarea class="lang-en">${escapeHtml(item.en)}</textarea>
+                    </div>
+                    <div>
+                        <label>中文 (ZH)</label>
+                        <textarea class="lang-zh">${escapeHtml(item.zh)}</textarea>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (e) {
+        form.innerHTML = '<p style="color:var(--admin-danger);padding:20px;text-align:center;">Failed to load content. Check server connection.</p>';
+        console.error(e);
+    }
+}
+
+async function saveAll() {
+    const items = document.querySelectorAll('.content-item');
+    let saved = 0;
+    let failed = 0;
+
+    for (const item of items) {
+        const key = item.dataset.key;
+        const en = item.querySelector('.lang-en').value;
+        const zh = item.querySelector('.lang-zh').value;
+
+        try {
+            const result = await apiPut(`/api/content/${MODULE}`, { key, en, zh });
+            if (result.success) saved++; else failed++;
+        } catch (e) {
+            failed++;
+        }
+    }
+
+    if (failed === 0) {
+        showToast(`${saved} item(s) saved successfully!`, 'success');
+    } else {
+        showToast(`${saved} saved, ${failed} failed`, 'error');
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text || '';
+    return div.innerHTML;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+const express = require('express');
+const session = require('express-session');
+const multer = require('multer');
+const svgCaptcha = require('svg-captcha');
+const bcrypt = require('bcryptjs');
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
+
+const app = express();
+const PORT = 3000;
+
+// ── Paths ──────────────────────────────────────────────
+const ROOT = path.resolve(__dirname, '..');
+const DATA_DIR = path.join(__dirname, 'data');
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+const USERS_FILE = path.join(DATA_DIR, 'users.json');
+const IMAGES_FILE = path.join(DATA_DIR, 'images.json');
+const PUBLIC_DIR = path.join(__dirname, 'public');
+
+// ── Ensure directories & files exist ───────────────────
+[DATA_DIR, UPLOADS_DIR].forEach(d => { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); });
+if (!fs.existsSync(IMAGES_FILE)) fs.writeFileSync(IMAGES_FILE, '[]', 'utf-8');
+
+// ── Default admin user (created on first run) ──────────
+function ensureDefaultUser() {
+    if (!fs.existsSync(USERS_FILE)) {
+        const hash = bcrypt.hashSync('admin123', 10);
+        fs.writeFileSync(USERS_FILE, JSON.stringify({ username: 'admin', passwordHash: hash }, null, 2), 'utf-8');
+        console.log('[init] Default admin user created (admin / admin123)');
+    }
+}
+ensureDefaultUser();
+
+// ── Middleware ──────────────────────────────────────────
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+    secret: crypto.randomBytes(32).toString('hex'),
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 2 * 60 * 60 * 1000 } // 2 hours
+}));
+
+// Serve admin UI from /admin/*
+app.use('/admin', express.static(PUBLIC_DIR));
+
+// Serve uploaded images
+app.use('/admin/uploads', express.static(UPLOADS_DIR));
+
+// ── Auth middleware ─────────────────────────────────────
+function requireAuth(req, res, next) {
+    if (req.session && req.session.loggedIn) return next();
+    res.status(401).json({ error: 'Unauthorized. Please login.' });
+}
+
+// ── Auth helper ─────────────────────────────────────────
+function getUser() {
+    return JSON.parse(fs.readFileSync(USERS_FILE, 'utf-8'));
+}
+
+// ══════════════════════════════════════════════════════════
+//  AUTHENTICATION API
+// ══════════════════════════════════════════════════════════
+
+// GET  /api/captcha  — generate CAPTCHA
+app.get('/api/captcha', (req, res) => {
+    const captcha = svgCaptcha.create({ size: 4, noise: 2, color: true, background: '#f7f5f0' });
+    req.session.captchaText = captcha.text.toLowerCase();
+    res.json({ svg: captcha.data });
+});
+
+// POST /api/login
+app.post('/api/login', (req, res) => {
+    const { username, password, captchaInput } = req.body;
+
+    // Validate CAPTCHA
+    if (!captchaInput || captchaInput.toLowerCase() !== req.session.captchaText) {
+        return res.json({ success: false, message: 'Incorrect CAPTCHA. Please try again.' });
+    }
+    req.session.captchaText = null; // one-time use
+
+    // Validate credentials
+    const user = getUser();
+    if (username !== user.username || !bcrypt.compareSync(password, user.passwordHash)) {
+        return res.json({ success: false, message: 'Invalid username or password.' });
+    }
+
+    req.session.loggedIn = true;
+    req.session.username = username;
+    res.json({ success: true, message: 'Login successful.', redirect: '/admin/dashboard.html' });
+});
+
+// POST /api/logout
+app.post('/api/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.json({ success: true, redirect: '/admin/' });
+    });
+});
+
+// GET  /api/session  — check if logged in
+app.get('/api/session', (req, res) => {
+    res.json({ loggedIn: !!req.session.loggedIn, username: req.session.username || null });
+});
+
+// ══════════════════════════════════════════════════════════
+//  IMAGE LIBRARY API
+// ══════════════════════════════════════════════════════════
+
+// Multer config
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const mod = (req.body.module || 'products').toLowerCase();
+        const dest = path.join(UPLOADS_DIR, mod);
+        if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+        cb(null, dest);
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const name = Date.now() + '-' + Math.round(Math.random() * 1e9) + ext;
+        cb(null, name);
+    }
+});
+const upload = multer({
+    storage,
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+    fileFilter: (req, file, cb) => {
+        const allowed = /\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i;
+        if (allowed.test(path.extname(file.originalname))) cb(null, true);
+        else cb(new Error('Only image files (jpg, png, gif, webp, svg, bmp) are allowed.'));
+    }
+});
+
+// GET  /api/images  — list images
+app.get('/api/images', requireAuth, (req, res) => {
+    const images = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf-8'));
+    const mod = req.query.module;
+    const filtered = mod ? images.filter(i => i.module === mod) : images;
+    res.json(filtered);
+});
+
+// POST /api/images/upload  — upload image(s)
+app.post('/api/images/upload', requireAuth, upload.array('images', 20), (req, res) => {
+    const images = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf-8'));
+    const mod = (req.body.module || 'products').toLowerCase();
+
+    const added = req.files.map(file => {
+        const entry = {
+            id: 'img_' + crypto.randomBytes(4).toString('hex'),
+            filename: file.filename,
+            originalName: file.originalname,
+            module: mod,
+            path: 'admin/uploads/' + mod + '/' + file.filename,
+            size: file.size,
+            uploadedAt: new Date().toISOString()
+        };
+        images.push(entry);
+        return entry;
+    });
+
+    fs.writeFileSync(IMAGES_FILE, JSON.stringify(images, null, 2), 'utf-8');
+    res.json({ success: true, images: added });
+});
+
+// DELETE /api/images/:id
+app.delete('/api/images/:id', requireAuth, (req, res) => {
+    let images = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf-8'));
+    const idx = images.findIndex(i => i.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Image not found' });
+
+    const img = images[idx];
+    // Delete file from disk
+    const filePath = path.join(__dirname, img.path);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+
+    images.splice(idx, 1);
+    fs.writeFileSync(IMAGES_FILE, JSON.stringify(images, null, 2), 'utf-8');
+    res.json({ success: true });
+});
+
+// ══════════════════════════════════════════════════════════
+//  CONTENT MANAGEMENT API
+// ══════════════════════════════════════════════════════════
+
+// Content registry: defines which elements are editable per module
+const CONTENT_REGISTRY = {
+    home: [
+        { key: 'heroQuote', file: 'index.html', selector: '.hero__quote', attr: 'data-en', zhAttr: 'data-zh', label: 'Hero Quote' },
+        { key: 'heroCta', file: 'index.html', selector: '.hero__cta .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'Hero CTA Button' },
+        { key: 'productsLabel', file: 'index.html', selector: '#products .section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Label' },
+        { key: 'productsTitle', file: 'index.html', selector: '#products .section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Title' },
+        { key: 'productsSubtitle', file: 'index.html', selector: '#products .section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Subtitle' },
+        { key: 'globalLabel', file: 'index.html', selector: '.global-reach .section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Global Reach Label' },
+        { key: 'globalTitle', file: 'index.html', selector: '.global-reach .section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Global Reach Title' },
+        { key: 'ecoTitle', file: 'index.html', selector: '.split__content h2:first-of-type', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Title' },
+        { key: 'ecoP1', file: 'index.html', selector: '.split__content p:first-of-type', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Paragraph 1' },
+        { key: 'ecoP2', file: 'index.html', selector: '.split__content p:nth-of-type(2)', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Paragraph 2' },
+        { key: 'ctaTitle', file: 'index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Banner Title' },
+        { key: 'ctaP', file: 'index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Banner Text' },
+        { key: 'ctaBtn', file: 'index.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
+    ],
+    products: [
+        { key: 'bannerBreadcrumb', file: 'products/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+        { key: 'bannerTitle', file: 'products/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+        { key: 'sectionLabel', file: 'products/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+        { key: 'sectionTitle', file: 'products/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+        { key: 'sectionSubtitle', file: 'products/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+        { key: 'splitTitle', file: 'products/index.html', selector: '.split__content h2', attr: 'data-en', zhAttr: 'data-zh', label: 'Split Title' },
+        { key: 'splitP', file: 'products/index.html', selector: '.split__content p', attr: 'data-en', zhAttr: 'data-zh', label: 'Split Paragraph' },
+        { key: 'ctaTitle', file: 'products/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+        { key: 'ctaP', file: 'products/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+        { key: 'ctaBtn', file: 'products/index.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
+    ],
+    sustainability: [
+        { key: 'bannerBreadcrumb', file: 'sustainability/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+        { key: 'bannerTitle', file: 'sustainability/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+        { key: 'sectionLabel', file: 'sustainability/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+        { key: 'sectionTitle', file: 'sustainability/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+        { key: 'ctaTitle', file: 'sustainability/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+        { key: 'ctaP', file: 'sustainability/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+    ],
+    contact: [
+        { key: 'bannerBreadcrumb', file: 'contact/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+        { key: 'bannerTitle', file: 'contact/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+        { key: 'sectionLabel', file: 'contact/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+        { key: 'sectionTitle', file: 'contact/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+        { key: 'sectionSubtitle', file: 'contact/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+        { key: 'ctaTitle', file: 'contact/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+        { key: 'ctaP', file: 'contact/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+    ],
+    about: [
+        { key: 'bannerBreadcrumb', file: 'about/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+        { key: 'bannerTitle', file: 'about/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+        { key: 'sectionLabel', file: 'about/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+        { key: 'sectionTitle', file: 'about/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+        { key: 'sectionSubtitle', file: 'about/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+        { key: 'ctaTitle', file: 'about/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+        { key: 'ctaP', file: 'about/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+    ]
+};
+
+// GET  /api/content/:module  — get editable content for a module
+app.get('/api/content/:module', requireAuth, (req, res) => {
+    const mod = req.params.module;
+    const registry = CONTENT_REGISTRY[mod];
+    if (!registry) return res.status(404).json({ error: 'Module not found' });
+
+    const cheerio = require('cheerio');
+    const items = [];
+
+    for (const item of registry) {
+        const filePath = path.join(ROOT, item.file);
+        if (!fs.existsSync(filePath)) continue;
+
+        const html = fs.readFileSync(filePath, 'utf-8');
+        const $ = cheerio.load(html);
+        const el = $(item.selector).first();
+        if (!el.length) continue;
+
+        items.push({
+            key: item.key,
+            label: item.label,
+            file: item.file,
+            selector: item.selector,
+            en: el.attr(item.attr) || el.text().trim(),
+            zh: el.attr(item.zhAttr) || ''
+        });
+    }
+
+    res.json({ module: mod, items });
+});
+
+// PUT  /api/content/:module  — update content
+app.put('/api/content/:module', requireAuth, (req, res) => {
+    const mod = req.params.module;
+    const registry = CONTENT_REGISTRY[mod];
+    if (!registry) return res.status(404).json({ error: 'Module not found' });
+
+    const { key, en, zh } = req.body;
+    const item = registry.find(i => i.key === key);
+    if (!item) return res.status(404).json({ error: 'Content item not found' });
+
+    const filePath = path.join(ROOT, item.file);
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'HTML file not found' });
+
+    let html = fs.readFileSync(filePath, 'utf-8');
+    const cheerio = require('cheerio');
+    const $ = cheerio.load(html);
+    const el = $(item.selector).first();
+    if (!el.length) return res.status(404).json({ error: 'Element not found in HTML' });
+
+    // Update the attributes
+    el.attr(item.attr, en);
+    if (item.zhAttr && zh) el.attr(item.zhAttr, zh);
+
+    // Also update the text content for the default language
+    const currentText = el.text().trim();
+    // Only update text if the element doesn't have child elements that would be destroyed
+    if (el.children().length === 0) {
+        el.text(en);
+    }
+
+    fs.writeFileSync(filePath, $.html(), 'utf-8');
+
+    // Also sync index.html if we modified website.html (and vice versa)
+    if (item.file === 'index.html' && fs.existsSync(path.join(ROOT, 'website.html'))) {
+        fs.copyFileSync(filePath, path.join(ROOT, 'website.html'));
+    } else if (item.file === 'website.html' && fs.existsSync(path.join(ROOT, 'index.html'))) {
+        fs.copyFileSync(filePath, path.join(ROOT, 'index.html'));
+    }
+
+    res.json({ success: true, message: `Updated "${item.label}" in ${item.file}` });
+});
+
+// ══════════════════════════════════════════════════════════
+//  IMAGE MOUNTING API
+// ══════════════════════════════════════════════════════════
+
+// POST /api/mount-image  — mount an image from library to a page element
+app.post('/api/mount-image', requireAuth, (req, res) => {
+    const { imageId, filePath, selector, attribute } = req.body;
+    if (!imageId || !filePath || !selector) {
+        return res.status(400).json({ error: 'imageId, filePath, and selector are required' });
+    }
+
+    // Get image from library
+    const images = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf-8'));
+    const img = images.find(i => i.id === imageId);
+    if (!img) return res.status(404).json({ error: 'Image not found in library' });
+
+    // Resolve HTML file
+    const htmlPath = path.join(ROOT, filePath);
+    if (!fs.existsSync(htmlPath)) return res.status(404).json({ error: 'HTML file not found' });
+
+    // Copy image to public image directory
+    const pubImgDir = path.join(ROOT, 'image', img.module);
+    if (!fs.existsSync(pubImgDir)) fs.mkdirSync(pubImgDir, { recursive: true });
+    const pubImgPath = path.join(pubImgDir, img.filename);
+
+    const srcUploadPath = path.join(__dirname, img.path);
+    if (fs.existsSync(srcUploadPath)) {
+        fs.copyFileSync(srcUploadPath, pubImgPath);
+    }
+
+    // Determine the correct relative path for the HTML file
+    const htmlDir = path.dirname(filePath);
+    const relImgPath = (htmlDir === '.')
+        ? `image/${img.module}/${img.filename}`
+        : `../image/${img.module}/${img.filename}`;
+
+    // Update the HTML
+    let html = fs.readFileSync(htmlPath, 'utf-8');
+    const cheerio = require('cheerio');
+    const $ = cheerio.load(html);
+    const el = $(selector).first();
+
+    if (!el.length) return res.status(404).json({ error: `Element "${selector}" not found in ${filePath}` });
+
+    const attr = attribute || 'src';
+    el.attr(attr, relImgPath);
+
+    fs.writeFileSync(htmlPath, $.html(), 'utf-8');
+
+    // Sync index.html ↔ website.html
+    if (filePath === 'index.html') fs.copyFileSync(htmlPath, path.join(ROOT, 'website.html'));
+    else if (filePath === 'website.html') fs.copyFileSync(htmlPath, path.join(ROOT, 'index.html'));
+
+    res.json({ success: true, message: `Mounted "${img.originalName}" → ${filePath} ${selector}` });
+});
+
+// ══════════════════════════════════════════════════════════
+//  DASHBOARD STATS
+// ══════════════════════════════════════════════════════════
+
+app.get('/api/stats', requireAuth, (req, res) => {
+    const images = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf-8'));
+    const byModule = {};
+    images.forEach(i => { byModule[i.module] = (byModule[i.module] || 0) + 1; });
+
+    res.json({
+        totalImages: images.length,
+        imagesByModule: byModule,
+        recentUploads: images.slice(-5).reverse(),
+        modules: Object.keys(CONTENT_REGISTRY)
+    });
+});
+
+// ══════════════════════════════════════════════════════════
+//  START SERVER
+// ══════════════════════════════════════════════════════════
+
+app.listen(PORT, () => {
+    console.log(`\n  Admin panel running at http://localhost:${PORT}/admin\n`);
+    console.log(`  Default login: admin / admin123\n`);
+});

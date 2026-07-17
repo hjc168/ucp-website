@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Wah Tat Plant</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="login-page">
+
+<div class="login-card">
+    <div class="login-card__logo">
+        <i class="fas fa-leaf" style="font-size:36px;color:var(--admin-primary);"></i>
+    </div>
+    <h1>Admin Panel</h1>
+    <p class="login-card__subtitle">Wah Tat Plant Content Management</p>
+
+    <div class="login-error" id="loginError"></div>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required autocomplete="current-password">
+        </div>
+        <div class="form-group">
+            <label>Verification Code</label>
+            <div class="captcha-group">
+                <div class="captcha-svg" id="captchaSvg" title="Click to refresh"></div>
+                <input type="text" id="captchaInput" placeholder="Enter code" maxlength="6" required autocomplete="off">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+    </form>
+</div>
+
+<script>
+const captchaSvg = document.getElementById('captchaSvg');
+const loginError = document.getElementById('loginError');
+const loginBtn = document.getElementById('loginBtn');
+
+// ── Load CAPTCHA ───────────────────────────────────
+async function loadCaptcha() {
+    try {
+        const res = await fetch('/api/captcha');
+        const data = await res.json();
+        captchaSvg.innerHTML = data.svg;
+    } catch (e) {
+        captchaSvg.innerHTML = '<span style="padding:12px;display:block;font-size:12px;">Failed to load</span>';
+    }
+}
+loadCaptcha();
+
+// Refresh CAPTCHA on click
+captchaSvg.addEventListener('click', loadCaptcha);
+
+// Check if already logged in
+(async () => {
+    try {
+        const res = await fetch('/api/session');
+        const data = await res.json();
+        if (data.loggedIn) window.location.href = '/admin/dashboard.html';
+    } catch (e) { /* not logged in, stay on login */ }
+})();
+
+// ── Login submit ───────────────────────────────────
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+    loginError.classList.remove('show');
+
+    try {
+        const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                captchaInput: document.getElementById('captchaInput').value
+            })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            window.location.href = data.redirect;
+        } else {
+            loginError.textContent = data.message || 'Login failed.';
+            loginError.classList.add('show');
+            loadCaptcha();
+            document.getElementById('captchaInput').value = '';
+        }
+    } catch (e) {
+        loginError.textContent = 'Connection error. Is the server running?';
+        loginError.classList.add('show');
+    }
+
+    loginBtn.disabled = false;
+    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+});
+</script>
+
+</body>
+</html>
