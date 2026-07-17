@@ -24,7 +24,26 @@ if (!fs.existsSync(IMAGES_FILE)) fs.writeFileSync(IMAGES_FILE, '[]', 'utf-8');
 
 // ── Default admin user (created on first run) ──────────
 function ensureDefaultUser() {
-    if (!fs.existsSync(USERS_FILE)) {
+    let needsWrite = false;
+    let user = null;
+
+    if (fs.existsSync(USERS_FILE)) {
+        try {
+            user = JSON.parse(fs.readFileSync(USERS_FILE, 'utf-8'));
+            // Validate username field exists and passwordHash is a valid bcrypt hash
+            if (!user.username || !user.passwordHash || !user.passwordHash.startsWith('$2')) {
+                console.log('[init] Users file has invalid hash — regenerating...');
+                needsWrite = true;
+            }
+        } catch (e) {
+            console.log('[init] Users file corrupted — regenerating...');
+            needsWrite = true;
+        }
+    } else {
+        needsWrite = true;
+    }
+
+    if (needsWrite) {
         const hash = bcrypt.hashSync('admin123', 10);
         fs.writeFileSync(USERS_FILE, JSON.stringify({ username: 'admin', passwordHash: hash }, null, 2), 'utf-8');
         console.log('[init] Default admin user created (admin / admin123)');

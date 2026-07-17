@@ -1,5 +1,4 @@
 {
   "username": "admin",
-  "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
-  "note": "Default password: admin123. Change after first login."
+  "passwordHash": "$2a$10$cCqqlQ97F0ezerfKf5raGu7OzrVD9ci8J5jXdF0AH/cxl0JQGsEeq"
 }
