@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="image/website-icon/Favicon-300x300.png">
+    <link rel="icon" type="../image/png" href="../image/website-icon/Favicon-300x300.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCP Group — Bringing Nature Indoors</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -1078,110 +1078,10 @@
         }
         .products-grid a.product-card {
             display: block;
-        }
-        /* ===== GALLERY ===== */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-        .gallery-item {
-            border-radius: 12px;
-            overflow: hidden;
-            aspect-ratio: 1;
-            background: #e0e0e0;
-            transition: var(--transition);
-        }
-        .gallery-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        .gallery-item:hover img { transform: scale(1.08); }
-        /* ===== SUSTAINABILITY CARDS ===== */
-        .sustainability-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-        .sus-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            transition: var(--transition);
-            text-decoration: none;
-            color: inherit;
-        }
-        .sus-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-            color: var(--color-purple);
-        }
-        .sus-card__icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        .sus-card__title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        .sus-card__desc {
-            font-size: 14px;
-            color: var(--color-text-light);
-            line-height: 1.6;
-        }
-        .sus-card__arrow {
-            display: inline-block;
-            margin-top: 16px;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--color-purple);
-        }
-        /* ===== INNOVATION ICONS GRID ===== */
-        .innovation-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-            text-align: center;
-        }
-        .innovation-item {
-            padding: 30px 20px;
-            transition: var(--transition);
-            border-radius: 12px;
-        }
-        .innovation-item:hover {
-            background: #fff;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-        }
-        .innovation-item__icon {
-            font-size: 44px;
-            margin-bottom: 16px;
-        }
-        .innovation-item__title {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        @media (max-width: 1024px) {
-            .sustainability-cards { grid-template-columns: repeat(2, 1fr); }
-            .innovation-grid { grid-template-columns: repeat(2, 1fr); }
+            display: block;
         }
         @media (max-width: 768px) {
             .page-banner { height: 280px; }
-            .sustainability-cards { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-            .innovation-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        }
-        @media (max-width: 480px) {
-            .innovation-grid { grid-template-columns: 1fr; }
         }
 
     </style>
@@ -1192,26 +1092,26 @@
     <header class="header" id="header">
         <div class="container">
             <!-- Logo -->
-            <a href="#" class="header__logo">
-                <img src="image/home-icon/cropped-WAH-TAT-WEBSITE-LOGO_202407-1-scaled-300x108.png" alt="UCP Group" height="44">
+            <a href="../" class="header__logo">
+                <img src="../image/home-icon/cropped-WAH-TAT-WEBSITE-LOGO_202407-1-scaled-300x108.png" alt="UCP Group" height="44">
             </a>
 
             <!-- Navigation -->
             <nav class="header__nav" id="mainNav">
                 <ul class="nav__list">
-                    <li class="nav__item"><a href="index.html" class="nav__link" data-en="Home" data-zh="首页">Home</a></li>
-                    <li class="nav__item"><a href="products.html" class="nav__link" data-en="Products" data-zh="产品">Products</a></li>
+                    <li class="nav__item"><a href="../" class="nav__link" data-en="Home" data-zh="首页">Home</a></li>
+                    <li class="nav__item"><a href="./" class="nav__link" data-en="Products" data-zh="产品">Products</a></li>
                     <li class="nav__item">
                         <a href="#" class="nav__link" data-en="Sustainability &amp; Innovation" data-zh="可持续发展与创新">Sustainability &amp; Innovation <i class="fas fa-chevron-down"></i></a>
                         <div class="nav__dropdown">
-                            <a href="sustainability.html" data-en="Our Breakthroughs" data-zh="我们的突破">Our Breakthroughs</a>
-                            <a href="climate-change.html" data-en="Climate Change" data-zh="气候变化">Climate Change</a>
-                            <a href="sustainable-materials.html" data-en="Sustainable Materials" data-zh="可持续物料">Sustainable Materials</a>
-                            <a href="green-manufacturing.html" data-en="Green Manufacturing" data-zh="绿色生产">Green Manufacturing</a>
+                            <a href="../sustainability/" data-en="Our Breakthroughs" data-zh="我们的突破">Our Breakthroughs</a>
+                            <a href="../sustainability/climate-change.html" data-en="Climate Change" data-zh="气候变化">Climate Change</a>
+                            <a href="../sustainability/sustainable-materials.html" data-en="Sustainable Materials" data-zh="可持续物料">Sustainable Materials</a>
+                            <a href="../sustainability/green-manufacturing.html" data-en="Green Manufacturing" data-zh="绿色生产">Green Manufacturing</a>
                         </div>
                     </li>
-                    <li class="nav__item"><a href="contact-us.html" class="nav__link" data-en="Contact Us" data-zh="联系我们">Contact Us</a></li>
-                    <li class="nav__item"><a href="#" class="nav__link" data-en="About Us" data-zh="关于我们">About Us</a></li>
+                    <li class="nav__item"><a href="../contact/" class="nav__link" data-en="Contact Us" data-zh="联系我们">Contact Us</a></li>
+                    <li class="nav__item"><a href="../about/" class="nav__link" data-en="About Us" data-zh="关于我们">About Us</a></li>
                 </ul>
             </nav>
 
@@ -1247,65 +1147,96 @@
 
     <!-- ===== PAGE BANNER ===== -->
     <section class="page-banner">
-        <div class="page-banner__bg" style="background: linear-gradient(135deg, rgba(50,55,60,0.85) 0%, rgba(46,125,50,0.7) 100%), url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1920&q=80') center/cover no-repeat;"></div>
+        <div class="page-banner__bg" style="background: linear-gradient(135deg, rgba(50,55,60,0.85) 0%, rgba(86,54,209,0.7) 100%), url('https://images.unsplash.com/photo-1487530811176-3780de880c2e?w=1920&q=80') center/cover no-repeat;"></div>
         <div class="container page-banner__content">
-            <p class="page-banner__breadcrumb" data-en="Home | Sustainability & Innovation | Sustainable Materials" data-zh="首页 | 可持续发展与创新 | 可持续物料">Home | Sustainability & Innovation | Sustainable Materials</p>
-            <h1 class="page-banner__title" data-en="Sustainable Materials" data-zh="可持续物料">Sustainable Materials</h1>
+            <p class="page-banner__breadcrumb" data-en="Products | Artisanal Design" data-zh="首页 | 设计及手工艺">Products | Artisanal Design</p>
+            <h1 class="page-banner__title" data-en="Artisanal Design" data-zh="设计及手工艺">Artisanal Design</h1>
         </div>
     </section>
 
-    <!-- ===== MATERIALS INNOVATION ===== -->
+    <!-- ===== INSPIRED BY NATURE ===== -->
+    <section class="section">
+        <div class="container">
+            <div class="split">
+                <div class="split__content">
+                    <h2 data-en="Inspired by Nature" data-zh="从大自然而来的灵感">Inspired by Nature</h2>
+                    <p data-en="We are dedicated to continuous improvement, with meticulously designed products spanning multiple collections that embody our commitment to design excellence, quality, and sustainability." data-zh="我们力求进步，精心设计的产品涵盖多个系列，实践了我们在产品设计、品质与可持续发展方面的承诺。">
+                        We are dedicated to continuous improvement, with meticulously designed products spanning multiple collections that embody our commitment to design excellence, quality, and sustainability.
+                    </p>
+                </div>
+                <div class="split__image">
+                    <img src="https://ucpgroup.com/wp-content/uploads/2022/10/product-_-services_artisanal-design-1024x564.png" alt="Artisanal Design" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PRODUCT CATEGORIES ===== -->
+    <section class="section section--cream">
+        <div class="container">
+            <div class="section__header">
+                <p class="section__label" data-en="Our Products" data-zh="我们的产品">Our Products</p>
+                <h2 class="section__title" data-en="Designed with Sustainability in Mind" data-zh="我们的产品糅合可持续发展理念">Designed with Sustainability in Mind</h2>
+                <p class="section__subtitle" data-en="Explore our diverse product ranges, each crafted with care by our skilled artisans and designers." data-zh="探索我们多元化的产品系列，每一件都由技艺精湛的工匠和设计师精心打造。">
+                    Explore our diverse product ranges, each crafted with care by our skilled artisans and designers.
+                </p>
+            </div>
+
+            <div class="products-grid">
+                <a href="floral-plants.html" class="product-card">
+                    <img class="product-card__img" src="https://ucpgroup.com/wp-content/uploads/2022/10/UPC-Products-Services-Category-1.png" alt="Floral, Plants & Greeneries" loading="lazy">
+                    <div class="product-card__overlay"></div>
+                    <div class="product-card__content">
+                        <h3 class="product-card__title" data-en="Floral, Plants &amp; Greeneries" data-zh="仿真花卉、植物与绿色植物">Floral, Plants &amp; Greeneries</h3>
+                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a href="home-decor.html" class="product-card">
+                    <img class="product-card__img" src="https://ucpgroup.com/wp-content/uploads/2022/10/UPC-Products-Services-Category-2.jpg" alt="Home Decor Accents" loading="lazy">
+                    <div class="product-card__overlay"></div>
+                    <div class="product-card__content">
+                        <h3 class="product-card__title" data-en="Home Decor Accents" data-zh="家居装饰品">Home Decor Accents</h3>
+                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a href="seasonal-festive.html" class="product-card">
+                    <img class="product-card__img" src="https://ucpgroup.com/wp-content/uploads/2022/10/UPC-Products-Services-Category-3.jpg" alt="Seasonal & Festive Decor" loading="lazy">
+                    <div class="product-card__overlay"></div>
+                    <div class="product-card__content">
+                        <h3 class="product-card__title" data-en="Seasonal &amp; Festive Decor" data-zh="季节性与节庆家居装饰品">Seasonal &amp; Festive Decor</h3>
+                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TREND-SETTING CRAFTSMANSHIP ===== -->
     <section class="section">
         <div class="container">
             <div class="split split--reverse">
                 <div class="split__content">
-                    <h2 data-en="Rethinking Materials" data-zh="重新思考物料">Rethinking Materials</h2>
-                    <p data-en="We have developed and implemented solutions for replacing virgin PE, PP, PE-film and PET fabrics used in our products with recycled and sustainable alternatives. Our goal is to minimize the use of virgin plastics across our entire product range." data-zh="我们已开发并实施了解决方案，用回收和可持续替代品取代产品中使用的原生PE、PP、PE膜和PET织物。我们的目标是在整个产品系列中尽量减少原生塑料的使用。">
-                        We have developed and implemented solutions for replacing virgin PE, PP, PE-film and PET fabrics used in our products with recycled and sustainable alternatives. Our goal is to minimize the use of virgin plastics across our entire product range.
+                    <h2 data-en="Trend-Setting Craftsmanship" data-zh="紧贴潮流的手工艺">Trend-Setting Craftsmanship</h2>
+                    <p data-en="We draw inspiration from nature. From flowers and plant stems to indoor and tropical plants, our designers and artisans meticulously study their forms at every angle and growth stage, reflecting our deep passion for the natural world." data-zh="我们以大自然为灵感。不论是花卉、植物枝干，以至室内与热带植物，我们的设计师及工匠会细心研究它们在不同角度和生长阶段的形态，充分展现我们对大自然的热爱。">
+                        We draw inspiration from nature. From flowers and plant stems to indoor and tropical plants, our designers and artisans meticulously study their forms at every angle and growth stage, reflecting our deep passion for the natural world.
                     </p>
-                    <p data-en="By innovating with materials, we are not only reducing waste but also creating higher-quality, longer-lasting products for our customers." data-zh="通过材料创新，我们不仅减少了废弃物，还为客户创造了更高质量、更持久的产品。">
-                        By innovating with materials, we are not only reducing waste but also creating higher-quality, longer-lasting products for our customers.
+                    <p data-en="Our products blend sustainability with celebration, allowing people to decorate their lives across seasons and festivals while contributing to environmental protection." data-zh="我们的产品糅合可持续发展理念，让人们在不同季节与节日点缀生活，也共同为保护环境作出贡献。">
+                        Our products blend sustainability with celebration, allowing people to decorate their lives across seasons and festivals while contributing to environmental protection.
                     </p>
                 </div>
                 <div class="split__image">
-                    <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&q=80" alt="Sustainable Materials" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1520412099551-62b6bafeb5e9?w=800&q=80" alt="Craftsmanship" loading="lazy">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===== MATERIAL TYPES ===== -->
-    <section class="section section--cream">
-        <div class="container">
-            <div class="section__header">
-                <h2 class="section__title" data-en="Our Material Solutions" data-zh="我们的材料解决方案">Our Material Solutions</h2>
-            </div>
-            <div class="sustainability-cards">
-                <div class="sus-card">
-                    <div class="sus-card__icon">🧴</div>
-                    <h3 class="sus-card__title" data-en="Recycled PE" data-zh="再生PE">Recycled PE</h3>
-                    <p class="sus-card__desc" data-en="Replacing virgin polyethylene with post-consumer recycled alternatives across our product lines." data-zh="在我们的产品线中用消费后回收替代品取代原生聚乙烯。">Replacing virgin polyethylene with post-consumer recycled alternatives across our product lines.</p>
-                </div>
-                <div class="sus-card">
-                    <div class="sus-card__icon">🔄</div>
-                    <h3 class="sus-card__title" data-en="Recycled PET Fabrics" data-zh="再生PET织物">Recycled PET Fabrics</h3>
-                    <p class="sus-card__desc" data-en="Using recycled PET bottles to create beautiful, durable fabrics for our artificial botanicals." data-zh="使用回收PET瓶为我们的人造植物创造美观耐用的织物。">Using recycled PET bottles to create beautiful, durable fabrics for our artificial botanicals.</p>
-                </div>
-                <div class="sus-card">
-                    <div class="sus-card__icon">🎋</div>
-                    <h3 class="sus-card__title" data-en="Bio-Based Materials" data-zh="生物基材料">Bio-Based Materials</h3>
-                    <p class="sus-card__desc" data-en="Exploring plant-based and biodegradable alternatives to reduce dependence on fossil-fuel-derived plastics." data-zh="探索植物基和可生物降解的替代品，以减少对化石燃料衍生塑料的依赖。">Exploring plant-based and biodegradable alternatives to reduce dependence on fossil-fuel-derived plastics.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== CTA ===== -->
+    <!-- ===== INQUIRY CTA ===== -->
     <section class="cta-banner">
         <div class="container">
-            <h2 data-en="Materials That Matter" data-zh="有意义的物料">Materials That Matter</h2>
-            <p data-en="Discover how we're transforming our supply chain with sustainable materials." data-zh="了解我们如何用可持续物料改造我们的供应链。">Discover how we're transforming our supply chain with sustainable materials.</p>
-            <a href="sustainability.html" class="btn btn-white" data-en="Back to Sustainability" data-zh="返回可持续发展">Back to Sustainability</a>
+            <h2 data-en="Inquiries &amp; Quotes" data-zh="查询及报价">Inquiries &amp; Quotes</h2>
+            <p data-en="We'd love to understand your needs and provide tailored products and services." data-zh="我们很乐意了解您的需要，为您度身订造适合的产品和服务。">We'd love to understand your needs and provide tailored products and services.</p>
+            <a href="#" class="btn btn-white" data-en="Contact Us" data-zh="联络我们">Contact Us</a>
         </div>
     </section>
 
@@ -1528,7 +1459,6 @@
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(el);
         });
-
     </script>
 </body>
 </html>

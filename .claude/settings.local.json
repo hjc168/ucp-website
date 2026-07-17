@@ -10,7 +10,8 @@
       "Bash(curl -sL \"https://ucpgroup.com/zh-cn/%e4%ba%a7%e5%93%81%e4%b8%8e%e6%9c%8d%e5%8a%a1/\" --max-time 15 -o /tmp/ucp_products.html)",
       "Bash(curl -sL \"https://ucpgroup.com/zh-cn/%e4%ba%a7%e5%93%81%e4%b8%8e%e6%9c%8d%e5%8a%a1/%e4%bb%bf%e7%9c%9f%e8%8a%b1%e5%8d%89%e3%80%81%e6%a4%8d%e7%89%a9%e4%b8%8e%e7%bb%bf%e8%89%b2%e6%a4%8d%e7%89%a9/\" --max-time 15 -o /tmp/ucp_floral.html)",
       "Bash(cat /tmp/ucp_products.html | grep -oP '<h[1-4][^>]*>[^<]+</h[1-4]>' | head -30)",
-      "Bash(grep -oP '.{0,150}\\(仿真花|花卉|植物|绿色|设计|可持续发展|手工|自然|灵感\\).{0,150}')"
+      "Bash(grep -oP '.{0,150}\\(仿真花|花卉|植物|绿色|设计|可持续发展|手工|自然|灵感\\).{0,150}')",
+      "Bash(python3)"
     ]
   }
 }
