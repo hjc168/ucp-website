@@ -575,6 +575,9 @@
             display: flex;
             transition: transform 0.5s ease;
         }
+        .testimonial-track.no-transition {
+            transition: none;
+        }
         .testimonial-card {
             min-width: 100%;
             padding: 0 60px;
@@ -1559,37 +1562,99 @@
             if (e.key === 'Escape') searchOverlay.classList.remove('active');
         });
 
-        // --- Testimonial carousel ---
+        // --- Testimonial carousel (seamless infinite loop) ---
         const track = document.getElementById('testimonialTrack');
         const prevBtn = document.getElementById('testimonialPrev');
         const nextBtn = document.getElementById('testimonialNext');
         const dotsContainer = document.getElementById('testimonialDots');
-        const cards = document.querySelectorAll('.testimonial-card');
-        let currentSlide = 0;
-        const totalSlides = cards.length;
+        const originalCards = document.querySelectorAll('.testimonial-card');
+        const totalSlides = originalCards.length;
 
-        // Create dots
+        // Clone first & last cards for seamless wrap-around
+        const firstClone = originalCards[0].cloneNode(true);
+        const lastClone = originalCards[totalSlides - 1].cloneNode(true);
+        track.insertBefore(lastClone, originalCards[0]);
+        track.appendChild(firstClone);
+
+        let currentIndex = 0;           // logical slide (0 … totalSlides-1)
+        let isJumping = false;          // true while moving to a clone in a wrap
+        let pendingJump = null;         // 'forward' | 'backward'
+
+        // Create dots (only for real slides)
         for (let i = 0; i < totalSlides; i++) {
             const dot = document.createElement('button');
             dot.classList.add('testimonial-dot');
             if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(i));
+            dot.addEventListener('click', () => goToSlide(i, null));
             dotsContainer.appendChild(dot);
         }
 
-        function goToSlide(index) {
-            currentSlide = (index + totalSlides) % totalSlides;
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        // Set initial position at the first real slide (visual pos = 1)
+        track.style.transform = 'translateX(-100%)';
+
+        function updateDots() {
             document.querySelectorAll('.testimonial-dot').forEach((d, i) => {
-                d.classList.toggle('active', i === currentSlide);
+                d.classList.toggle('active', i === currentIndex);
             });
         }
 
-        prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
-        nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+        function goToSlide(index, direction) {
+            if (isJumping) return; // ignore clicks during the instant jump phase
 
-        // Auto-play testimonials
-        setInterval(() => goToSlide(currentSlide + 1), 5000);
+            const newIndex = (index + totalSlides) % totalSlides;
+
+            // Detect wrap-around
+            const isWrappingForward = direction === 'next'
+                && newIndex === 0 && currentIndex === totalSlides - 1;
+            const isWrappingBackward = direction === 'prev'
+                && newIndex === totalSlides - 1 && currentIndex === 0;
+
+            currentIndex = newIndex;
+            track.style.transition = 'transform 0.5s ease';
+
+            if (isWrappingForward) {
+                // Slide forward into the clone of the first card
+                track.style.transform = `translateX(-${(totalSlides + 1) * 100}%)`;
+                isJumping = true;
+                pendingJump = 'forward';
+            } else if (isWrappingBackward) {
+                // Slide backward into the clone of the last card
+                track.style.transform = 'translateX(0%)';
+                isJumping = true;
+                pendingJump = 'backward';
+            } else {
+                // Normal slide — visual position = logical + 1 (offset by the prepended clone)
+                track.style.transform = `translateX(-${(newIndex + 1) * 100}%)`;
+            }
+
+            updateDots();
+        }
+
+        // After the slide animation finishes, jump to the real card if we landed on a clone
+        track.addEventListener('transitionend', () => {
+            if (pendingJump === 'forward') {
+                track.classList.add('no-transition');
+                track.style.transform = 'translateX(-100%)'; // real first slide
+                // Force reflow so the no-transition takes effect before we restore
+                track.offsetHeight;
+                track.classList.remove('no-transition');
+                pendingJump = null;
+                isJumping = false;
+            } else if (pendingJump === 'backward') {
+                track.classList.add('no-transition');
+                track.style.transform = `translateX(-${totalSlides * 100}%)`; // real last slide
+                track.offsetHeight;
+                track.classList.remove('no-transition');
+                pendingJump = null;
+                isJumping = false;
+            }
+        });
+
+        prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1, 'prev'));
+        nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1, 'next'));
+
+        // Auto-play
+        setInterval(() => goToSlide(currentIndex + 1, 'next'), 5000);
 
         // --- Intersection Observer for animations ---
         const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
