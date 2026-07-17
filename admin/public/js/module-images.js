@@ -44,8 +44,6 @@ document.addEventListener("click", function(e) {
         pendingReplaceTarget = { file: file, selector: sel };
         var overlay = document.getElementById("pickerModalOverlay");
         if (overlay) overlay.classList.add("active");
-        var filter = document.getElementById("pickerModuleFilter");
-        if (filter && typeof MODULE !== "undefined") filter.value = MODULE;
         loadPickerImages();
     }
 });
@@ -57,13 +55,11 @@ function closePickerModal() {
 }
 
 async function loadPickerImages() {
-    var modEl = document.getElementById("pickerModuleFilter");
-    var mod = modEl ? modEl.value : "";
     var grid = document.getElementById("pickerImageGrid");
     if (!grid) return;
     grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;">Loading...</p>';
     try {
-        var images = await apiGet("/api/images" + (mod ? "?module=" + mod : ""));
+        var images = await apiGet("/api/images");
         if (!images || images.length === 0) {
             grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;">No images in library.</p>';
             return;
@@ -75,7 +71,7 @@ async function loadPickerImages() {
             html += '<img class="image-card__preview" src="../' + img.path + '" alt="' + img.originalName + '" loading="lazy" onerror="this.style.opacity=\'0.2\'">';
             html += '<div class="image-card__info"><div class="image-card__name">' + img.originalName + '</div>';
             html += '<div class="image-card__meta">' + formatSize(img.size) + '</div></div>';
-            html += '<div style="padding:0 12px 4px;"><span class="badge badge--' + img.module + '">' + img.module + '</span></div></div>';
+            html += '</div>';
         }
         grid.innerHTML = html;
     } catch (e) {

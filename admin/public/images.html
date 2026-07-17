@@ -52,28 +52,12 @@
             <input type="file" id="fileInput" multiple accept="image/*">
         </div>
         <div style="margin-top:12px;display:flex;gap:12px;align-items:center;">
-            <label for="uploadModule" style="font-size:13px;font-weight:600;" data-en="Target Module:" data-zh="目标模块：">Target Module:</label>
-            <select id="uploadModule">
-                <option value="products">Products</option>
-                <option value="sustainability">Sustainability</option>
-                <option value="home">Home</option>
-                <option value="contact">Contact</option>
-                <option value="about">About</option>
-            </select>
             <span id="uploadStatus" style="font-size:13px;color:var(--admin-text-light);"></span>
         </div>
     </div>
 
     <!-- Filter Bar -->
     <div class="filter-bar">
-        <select id="filterModule" onchange="loadImages()">
-            <option value="" data-en="All Modules" data-zh="全部模块">All Modules</option>
-            <option value="products">Products</option>
-            <option value="sustainability">Sustainability</option>
-            <option value="home">Home</option>
-            <option value="contact">Contact</option>
-            <option value="about">About</option>
-        </select>
         <span id="imageCount" style="font-size:13px;color:var(--admin-text-light);"></span>
     </div>
 
@@ -128,12 +112,11 @@ let mountImageId = null;
 })();
 
 async function loadImages() {
-    const mod = document.getElementById('filterModule').value;
     const grid = document.getElementById('imageGrid');
     grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-text-light);padding:40px;text-align:center;">Loading...</p>';
 
     try {
-        const images = await apiGet('/api/images' + (mod ? `?module=${mod}` : ''));
+        const images = await apiGet('/api/images');
         currentImages = images || [];
         document.getElementById('imageCount').textContent = `${currentImages.length} image(s)`;
 
@@ -148,9 +131,6 @@ async function loadImages() {
                 <div class="image-card__info">
                     <div class="image-card__name" title="${img.originalName}">${img.originalName}</div>
                     <div class="image-card__meta">${formatSize(img.size)}</div>
-                </div>
-                <div style="padding:0 12px 4px;">
-                    <span class="badge badge--${img.module}">${img.module}</span>
                 </div>
                 <div class="image-card__actions">
                     <button class="btn btn-primary btn-sm" onclick="openMountModal('${img.id}')" title="Mount to page">
@@ -179,12 +159,10 @@ fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
 
 async function handleFiles(files) {
     if (!files.length) return;
-    const mod = document.getElementById('uploadModule').value;
     const status = document.getElementById('uploadStatus');
     status.textContent = `Uploading ${files.length} file(s)...`;
 
     const formData = new FormData();
-    formData.append('module', mod);
     for (const file of files) formData.append('images', file);
 
     try {
@@ -192,7 +170,7 @@ async function handleFiles(files) {
         if (res.status === 401) { window.location.href = '/admin/'; return; }
         const data = await res.json();
         status.textContent = data.success ? `Uploaded ${data.images.length} image(s)!` : 'Upload failed.';
-        showToast(`Uploaded ${data.images.length} image(s) to ${mod}`, 'success');
+        showToast(`Uploaded ${data.images.length} image(s)`, 'success');
         fileInput.value = '';
         loadImages();
     } catch (e) {

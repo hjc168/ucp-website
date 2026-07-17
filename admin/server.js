@@ -127,12 +127,11 @@ app.get('/api/session', (req, res) => {
 // ══════════════════════════════════════════════════════════
 
 // Multer config
+// Multer — save all images to a single global uploads directory
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const mod = (req.body.module || 'products').toLowerCase();
-        const dest = path.join(UPLOADS_DIR, mod);
-        if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
-        cb(null, dest);
+        if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+        cb(null, UPLOADS_DIR);
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
@@ -142,7 +141,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
     storage,
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+    limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowed = /\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i;
         if (allowed.test(path.extname(file.originalname))) cb(null, true);
@@ -150,26 +149,22 @@ const upload = multer({
     }
 });
 
-// GET  /api/images  — list images
+// GET  /api/images  — list all images (global library)
 app.get('/api/images', requireAuth, (req, res) => {
     const images = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf-8'));
-    const mod = req.query.module;
-    const filtered = mod ? images.filter(i => i.module === mod) : images;
-    res.json(filtered);
+    res.json(images);
 });
 
-// POST /api/images/upload  — upload image(s)
+// POST /api/images/upload  — upload image(s) to global library
 app.post('/api/images/upload', requireAuth, upload.array('images', 20), (req, res) => {
     const images = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf-8'));
-    const mod = (req.body.module || 'products').toLowerCase();
 
     const added = req.files.map(file => {
         const entry = {
             id: 'img_' + crypto.randomBytes(4).toString('hex'),
             filename: file.filename,
             originalName: file.originalname,
-            module: mod,
-            path: 'admin/uploads/' + mod + '/' + file.filename,
+            path: 'admin/uploads/' + file.filename,
             size: file.size,
             uploadedAt: new Date().toISOString()
         };
@@ -446,12 +441,11 @@ app.post('/api/mount-image', requireAuth, (req, res) => {
     if (!fs.existsSync(htmlPath)) return res.status(404).json({ error: 'HTML file not found' });
 
     // Copy image to public image directory
-    const pubImgDir = path.join(ROOT, 'image', img.module);
+    const pubImgDir = path.join(ROOT, 'image', 'products');
     if (!fs.existsSync(pubImgDir)) fs.mkdirSync(pubImgDir, { recursive: true });
     const pubImgPath = path.join(pubImgDir, img.filename);
 
-    // img.path is 'admin/uploads/<module>/<filename>' — strip 'admin/' prefix
-    // because __dirname already points to the admin/ directory
+    // img.path is 'admin/uploads/<filename>' — strip 'admin/' prefix
     const uploadRelPath = img.path.replace(/^admin[\/\\]?/, '');
     const srcUploadPath = path.join(__dirname, uploadRelPath);
     if (fs.existsSync(srcUploadPath)) {
@@ -463,8 +457,8 @@ app.post('/api/mount-image', requireAuth, (req, res) => {
     // Determine the correct relative path for the HTML file
     const htmlDir = path.dirname(filePath);
     const relImgPath = (htmlDir === '.')
-        ? `image/${img.module}/${img.filename}`
-        : `../image/${img.module}/${img.filename}`;
+        ? 'image/products/' + img.filename
+        : '../image/products/' + img.filename;
 
     // Update the HTML
     let html = fs.readFileSync(htmlPath, 'utf-8');
@@ -558,12 +552,9 @@ app.get('/api/page-images', requireAuth, (req, res) => {
 
 app.get('/api/stats', requireAuth, (req, res) => {
     const images = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf-8'));
-    const byModule = {};
-    images.forEach(i => { byModule[i.module] = (byModule[i.module] || 0) + 1; });
 
     res.json({
         totalImages: images.length,
-        imagesByModule: byModule,
         recentUploads: images.slice(-5).reverse(),
         modules: Object.keys(CONTENT_REGISTRY)
     });

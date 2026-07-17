@@ -104,11 +104,6 @@
                 <div class="stat-card__number">${stats.totalImages}</div>
                 <div class="stat-card__label">Total Images</div>
             </div>
-            ${Object.entries(stats.imagesByModule).map(([mod, count]) => `
-            <div class="stat-card">
-                <div class="stat-card__number">${count}</div>
-                <div class="stat-card__label">${mod.charAt(0).toUpperCase() + mod.slice(1)} Images</div>
-            </div>`).join('')}
             <div class="stat-card">
                 <div class="stat-card__number">${stats.modules.length}</div>
                 <div class="stat-card__label">Modules</div>
@@ -125,7 +120,7 @@
                         <div style="font-weight:600;font-size:13px;">${i.originalName}</div>
                         <div style="font-size:11px;color:var(--admin-text-light);">${formatSize(i.size)} · ${formatDate(i.uploadedAt)}</div>
                     </div>
-                    <span class="badge badge--${i.module}">${i.module}</span>
+                    <span style="font-size:11px;color:var(--admin-text-light);">${formatSize(i.size)}</span>
                 </div>`).join('')
             : '<p>No images uploaded yet. <a href="images.html">Upload your first image</a>.</p>';
     } catch (e) {
