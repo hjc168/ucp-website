@@ -1585,7 +1585,7 @@
             const dot = document.createElement('button');
             dot.classList.add('testimonial-dot');
             if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(i, null));
+            dot.addEventListener('click', () => { goToSlide(i, null); resetAutoPlay(); });
             dotsContainer.appendChild(dot);
         }
 
@@ -1631,30 +1631,45 @@
         }
 
         // After the slide animation finishes, jump to the real card if we landed on a clone
-        track.addEventListener('transitionend', () => {
+        track.addEventListener('transitionend', (e) => {
+            // Only react to transform transitions on the track itself, not children
+            if (e.target !== track) return;
+
             if (pendingJump === 'forward') {
-                track.classList.add('no-transition');
-                track.style.transform = 'translateX(-100%)'; // real first slide
-                // Force reflow so the no-transition takes effect before we restore
-                track.offsetHeight;
-                track.classList.remove('no-transition');
-                pendingJump = null;
-                isJumping = false;
+                // Disable transition, jump instantly to real first slide
+                track.style.transition = 'none';
+                track.style.transform = 'translateX(-100%)';
+                // Double rAF guarantees the browser commits the no-transition jump
+                // before re-enabling transition, preventing any spurious animation
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        track.style.transition = 'transform 0.5s ease';
+                        pendingJump = null;
+                        isJumping = false;
+                    });
+                });
             } else if (pendingJump === 'backward') {
-                track.classList.add('no-transition');
-                track.style.transform = `translateX(-${totalSlides * 100}%)`; // real last slide
-                track.offsetHeight;
-                track.classList.remove('no-transition');
-                pendingJump = null;
-                isJumping = false;
+                track.style.transition = 'none';
+                track.style.transform = `translateX(-${totalSlides * 100}%)`;
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        track.style.transition = 'transform 0.5s ease';
+                        pendingJump = null;
+                        isJumping = false;
+                    });
+                });
             }
         });
 
-        prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1, 'prev'));
-        nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1, 'next'));
+        prevBtn.addEventListener('click', () => { goToSlide(currentIndex - 1, 'prev'); resetAutoPlay(); });
+        nextBtn.addEventListener('click', () => { goToSlide(currentIndex + 1, 'next'); resetAutoPlay(); });
 
-        // Auto-play
-        setInterval(() => goToSlide(currentIndex + 1, 'next'), 5000);
+        // Auto-play — timer resets on manual navigation to avoid surprise jumps
+        let autoPlayTimer = setInterval(() => goToSlide(currentIndex + 1, 'next'), 5000);
+        function resetAutoPlay() {
+            clearInterval(autoPlayTimer);
+            autoPlayTimer = setInterval(() => goToSlide(currentIndex + 1, 'next'), 5000);
+        }
 
         // --- Intersection Observer for animations ---
         const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
