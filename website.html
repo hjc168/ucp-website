@@ -1497,6 +1497,10 @@
                     }
                 }
             });
+                        document.querySelectorAll('[data-en-html][data-zh-html]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}-html`);
+            });
+
             localStorage.setItem('ucp-lang', currentLang);
         }
 

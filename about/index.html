@@ -272,6 +272,10 @@
                 if (el.children.length === 0) el.textContent = newText;
                 else for (const node of el.childNodes) { if (node.nodeType === Node.TEXT_NODE) { node.textContent = newText; break; } }
             });
+                        document.querySelectorAll('[data-en-html][data-zh-html]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}-html`);
+            });
+
             localStorage.setItem('ucp-lang', currentLang);
         }
         if (currentLang === 'zh') applyLang('zh');

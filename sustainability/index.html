@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="../image/png" href="../image/website-icon/Favicon-300x300.png">
+    <link rel="icon" type="image/png" href="../image/website-icon/Favicon-300x300.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCP Group — Bringing Nature Indoors</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -1432,6 +1432,10 @@
                     }
                 }
             });
+                        document.querySelectorAll('[data-en-html][data-zh-html]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}-html`);
+            });
+
             localStorage.setItem('ucp-lang', currentLang);
         }
 

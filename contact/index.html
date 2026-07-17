@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="../image/png" href="../image/website-icon/Favicon-300x300.png">
+    <link rel="icon" type="image/png" href="../image/website-icon/Favicon-300x300.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCP Group — Bringing Nature Indoors</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -1274,8 +1274,8 @@
                         <h3 data-en="Get In Touch" data-zh="联系我们">Get In Touch</h3>
 
                         <div class="contact-info__item">
-                            <strong data-en="Hong Kong" data-zh="香港">Hong Kong</strong>
-                            <p>
+                            <strong data-en="Hong Kong" data-zh="中国香港">Hong Kong</strong>
+                            <p data-en-html="Kwai Chung<br>4/F, Fabrico Industrial Building<br>78 Kwai Cheong Rd<br>Kwai Chung<br>Hong Kong" data-zh-html="葵涌<br>香港葵涌葵昌路78号<br>Fabrico Industrial Building 4楼<br>葵涌<br>香港">
                                 Kwai Chung<br>
                                 4/F, Fabrico Industrial Building<br>
                                 78 Kwai Cheong Rd<br>
@@ -1292,8 +1292,8 @@
                         </div>
 
                         <div class="contact-info__item">
-                            <strong data-en="China" data-zh="中国">China</strong>
-                            <p>
+                            <strong data-en="China" data-zh="中国总部">China</strong>
+                            <p data-en-html="GUANGDONG PROVINCE<br>NO. 3, JINLING Road<br>TANGXIA Town<br>PENGJIANG District<br>JIANGMEN City<br>GUANGDONG Province" data-zh-html="广东省<br>江门市蓬江区<br>棠下镇金岭路3号<br>广东省">
                                 GUANGDONG PROVINCE<br>
                                 NO. 3, JINLING Road<br>
                                 TANGXIA Town<br>
@@ -1424,6 +1424,10 @@
                     }
                 }
             });
+                        document.querySelectorAll('[data-en-html][data-zh-html]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}-html`);
+            });
+
             localStorage.setItem('ucp-lang', currentLang);
         }
 
