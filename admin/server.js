@@ -201,92 +201,186 @@ app.delete('/api/images/:id', requireAuth, (req, res) => {
 //  CONTENT MANAGEMENT API
 // ══════════════════════════════════════════════════════════
 
-// Content registry: defines which elements are editable per module
+// Content registry: defines which elements are editable per module & sub-page
+// Structure: { module: { pages: { pageKey: { label, labelZh, items: [...] } } } }
 const CONTENT_REGISTRY = {
-    home: [
-        { key: 'heroQuote', file: 'index.html', selector: '.hero__quote', attr: 'data-en', zhAttr: 'data-zh', label: 'Hero Quote' },
-        { key: 'heroCta', file: 'index.html', selector: '.hero__cta .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'Hero CTA Button' },
-        { key: 'productsLabel', file: 'index.html', selector: '#products .section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Label' },
-        { key: 'productsTitle', file: 'index.html', selector: '#products .section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Title' },
-        { key: 'productsSubtitle', file: 'index.html', selector: '#products .section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Subtitle' },
-        { key: 'globalLabel', file: 'index.html', selector: '.global-reach .section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Global Reach Label' },
-        { key: 'globalTitle', file: 'index.html', selector: '.global-reach .section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Global Reach Title' },
-        { key: 'ecoTitle', file: 'index.html', selector: '.split__content h2:first-of-type', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Title' },
-        { key: 'ecoP1', file: 'index.html', selector: '.split__content p:first-of-type', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Paragraph 1' },
-        { key: 'ecoP2', file: 'index.html', selector: '.split__content p:nth-of-type(2)', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Paragraph 2' },
-        { key: 'ctaTitle', file: 'index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Banner Title' },
-        { key: 'ctaP', file: 'index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Banner Text' },
-        { key: 'ctaBtn', file: 'index.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
-    ],
-    products: [
-        { key: 'bannerBreadcrumb', file: 'products/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
-        { key: 'bannerTitle', file: 'products/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
-        { key: 'sectionLabel', file: 'products/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
-        { key: 'sectionTitle', file: 'products/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
-        { key: 'sectionSubtitle', file: 'products/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
-        { key: 'splitTitle', file: 'products/index.html', selector: '.split__content h2', attr: 'data-en', zhAttr: 'data-zh', label: 'Split Title' },
-        { key: 'splitP', file: 'products/index.html', selector: '.split__content p', attr: 'data-en', zhAttr: 'data-zh', label: 'Split Paragraph' },
-        { key: 'ctaTitle', file: 'products/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
-        { key: 'ctaP', file: 'products/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
-        { key: 'ctaBtn', file: 'products/index.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
-    ],
-    sustainability: [
-        { key: 'bannerBreadcrumb', file: 'sustainability/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
-        { key: 'bannerTitle', file: 'sustainability/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
-        { key: 'sectionLabel', file: 'sustainability/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
-        { key: 'sectionTitle', file: 'sustainability/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
-        { key: 'ctaTitle', file: 'sustainability/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
-        { key: 'ctaP', file: 'sustainability/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
-    ],
-    contact: [
-        { key: 'bannerBreadcrumb', file: 'contact/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
-        { key: 'bannerTitle', file: 'contact/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
-        { key: 'sectionLabel', file: 'contact/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
-        { key: 'sectionTitle', file: 'contact/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
-        { key: 'sectionSubtitle', file: 'contact/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
-        { key: 'ctaTitle', file: 'contact/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
-        { key: 'ctaP', file: 'contact/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
-    ],
-    about: [
-        { key: 'bannerBreadcrumb', file: 'about/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
-        { key: 'bannerTitle', file: 'about/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
-        { key: 'sectionLabel', file: 'about/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
-        { key: 'sectionTitle', file: 'about/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
-        { key: 'sectionSubtitle', file: 'about/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
-        { key: 'ctaTitle', file: 'about/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
-        { key: 'ctaP', file: 'about/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
-    ]
+    home: { pages: {
+        index: { label: 'Home Page', labelZh: '首页', items: [
+            { key: 'heroQuote', file: 'index.html', selector: '.hero__quote', attr: 'data-en', zhAttr: 'data-zh', label: 'Hero Quote' },
+            { key: 'heroCta', file: 'index.html', selector: '.hero__cta .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'Hero CTA Button' },
+            { key: 'productsLabel', file: 'index.html', selector: '#products .section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Label' },
+            { key: 'productsTitle', file: 'index.html', selector: '#products .section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Title' },
+            { key: 'productsSubtitle', file: 'index.html', selector: '#products .section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Products Section Subtitle' },
+            { key: 'globalLabel', file: 'index.html', selector: '.global-reach .section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Global Reach Label' },
+            { key: 'globalTitle', file: 'index.html', selector: '.global-reach .section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Global Reach Title' },
+            { key: 'ecoTitle', file: 'index.html', selector: '.split__content h2:first-of-type', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Title' },
+            { key: 'ecoP1', file: 'index.html', selector: '.split__content p:first-of-type', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Paragraph 1' },
+            { key: 'ecoP2', file: 'index.html', selector: '.split__content p:nth-of-type(2)', attr: 'data-en', zhAttr: 'data-zh', label: 'Eco-Friendly Paragraph 2' },
+            { key: 'ctaTitle', file: 'index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Banner Title' },
+            { key: 'ctaP', file: 'index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Banner Text' },
+            { key: 'ctaBtn', file: 'index.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
+        ]}
+    }},
+    products: { pages: {
+        index: { label: 'Main Page', labelZh: '产品主页面', items: [
+            { key: 'bannerBreadcrumb', file: 'products/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'products/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'products/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'products/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'sectionSubtitle', file: 'products/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+            { key: 'splitTitle', file: 'products/index.html', selector: '.split__content h2', attr: 'data-en', zhAttr: 'data-zh', label: 'Split Title' },
+            { key: 'splitP', file: 'products/index.html', selector: '.split__content p', attr: 'data-en', zhAttr: 'data-zh', label: 'Split Paragraph' },
+            { key: 'ctaTitle', file: 'products/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'products/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+            { key: 'ctaBtn', file: 'products/index.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
+        ]},
+        'floral-plants': { label: 'Floral, Plants & Greeneries', labelZh: '仿真花卉、植物与绿色植物', items: [
+            { key: 'bannerBreadcrumb', file: 'products/floral-plants.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'products/floral-plants.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'products/floral-plants.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'products/floral-plants.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'sectionSubtitle', file: 'products/floral-plants.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+            { key: 'ctaTitle', file: 'products/floral-plants.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'products/floral-plants.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+            { key: 'ctaBtn', file: 'products/floral-plants.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
+            { key: 'galleryNote', file: 'products/floral-plants.html', selector: '.section--cream .container > div:last-child p', attr: 'data-en', zhAttr: 'data-zh', label: 'Gallery Note' },
+        ]},
+        'home-decor': { label: 'Home Décor Accents', labelZh: '家居装饰精品', items: [
+            { key: 'bannerBreadcrumb', file: 'products/home-decor.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'products/home-decor.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'products/home-decor.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'products/home-decor.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'sectionSubtitle', file: 'products/home-decor.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+            { key: 'ctaTitle', file: 'products/home-decor.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'products/home-decor.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+            { key: 'ctaBtn', file: 'products/home-decor.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
+            { key: 'galleryNote', file: 'products/home-decor.html', selector: '.section--cream .container > div:last-child p', attr: 'data-en', zhAttr: 'data-zh', label: 'Gallery Note' },
+        ]},
+        'seasonal-festive': { label: 'Seasonal & Festive Décor', labelZh: '节庆装饰系列', items: [
+            { key: 'bannerBreadcrumb', file: 'products/seasonal-festive.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'products/seasonal-festive.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'products/seasonal-festive.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'products/seasonal-festive.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'sectionSubtitle', file: 'products/seasonal-festive.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+            { key: 'ctaTitle', file: 'products/seasonal-festive.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'products/seasonal-festive.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+            { key: 'ctaBtn', file: 'products/seasonal-festive.html', selector: '.cta-banner .btn', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Button' },
+            { key: 'galleryNote', file: 'products/seasonal-festive.html', selector: '.section--cream .container > div:last-child p', attr: 'data-en', zhAttr: 'data-zh', label: 'Gallery Note' },
+        ]}
+    }},
+    sustainability: { pages: {
+        index: { label: 'Our Breakthroughs', labelZh: '我们的突破', items: [
+            { key: 'bannerBreadcrumb', file: 'sustainability/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'sustainability/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'sustainability/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'sustainability/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'ctaTitle', file: 'sustainability/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'sustainability/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+        ]},
+        'climate-change': { label: 'Climate Change', labelZh: '气候变化', items: [
+            { key: 'bannerBreadcrumb', file: 'sustainability/climate-change.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'sustainability/climate-change.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'sustainability/climate-change.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'sustainability/climate-change.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'ctaTitle', file: 'sustainability/climate-change.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'sustainability/climate-change.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+        ]},
+        'sustainable-materials': { label: 'Sustainable Materials', labelZh: '可持续物料', items: [
+            { key: 'bannerBreadcrumb', file: 'sustainability/sustainable-materials.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'sustainability/sustainable-materials.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'sustainability/sustainable-materials.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'sustainability/sustainable-materials.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'ctaTitle', file: 'sustainability/sustainable-materials.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'sustainability/sustainable-materials.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+        ]},
+        'green-manufacturing': { label: 'Green Manufacturing', labelZh: '绿色生产', items: [
+            { key: 'bannerBreadcrumb', file: 'sustainability/green-manufacturing.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'sustainability/green-manufacturing.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'sustainability/green-manufacturing.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'sustainability/green-manufacturing.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'ctaTitle', file: 'sustainability/green-manufacturing.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'sustainability/green-manufacturing.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+        ]}
+    }},
+    contact: { pages: {
+        index: { label: 'Contact Us', labelZh: '联系我们', items: [
+            { key: 'bannerBreadcrumb', file: 'contact/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'contact/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'contact/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'contact/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'sectionSubtitle', file: 'contact/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+            { key: 'ctaTitle', file: 'contact/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'contact/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+        ]}
+    }},
+    about: { pages: {
+        index: { label: 'About Us', labelZh: '关于我们', items: [
+            { key: 'bannerBreadcrumb', file: 'about/index.html', selector: '.page-banner__breadcrumb', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Breadcrumb' },
+            { key: 'bannerTitle', file: 'about/index.html', selector: '.page-banner__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Banner Title' },
+            { key: 'sectionLabel', file: 'about/index.html', selector: '.section__label', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Label' },
+            { key: 'sectionTitle', file: 'about/index.html', selector: '.section__title', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Title' },
+            { key: 'sectionSubtitle', file: 'about/index.html', selector: '.section__subtitle', attr: 'data-en', zhAttr: 'data-zh', label: 'Section Subtitle' },
+            { key: 'ctaTitle', file: 'about/index.html', selector: '.cta-banner h2', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Title' },
+            { key: 'ctaP', file: 'about/index.html', selector: '.cta-banner p', attr: 'data-en', zhAttr: 'data-zh', label: 'CTA Text' },
+        ]}
+    }}
 };
 
-// GET  /api/content/:module  — get editable content for a module
+// GET  /api/content/:module  — get editable content (with optional ?page= sub-page filter)
 app.get('/api/content/:module', requireAuth, (req, res) => {
     const mod = req.params.module;
     const registry = CONTENT_REGISTRY[mod];
     if (!registry) return res.status(404).json({ error: 'Module not found' });
 
+    const pageParam = req.query.page;
     const cheerio = require('cheerio');
-    const items = [];
 
-    for (const item of registry) {
-        const filePath = path.join(ROOT, item.file);
-        if (!fs.existsSync(filePath)) continue;
+    // Return list of available pages
+    const pages = Object.entries(registry.pages).map(([key, pg]) => ({
+        key, label: pg.label, labelZh: pg.labelZh, itemCount: pg.items.length
+    }));
 
-        const html = fs.readFileSync(filePath, 'utf-8');
-        const $ = cheerio.load(html);
-        const el = $(item.selector).first();
-        if (!el.length) continue;
+    // If a specific page is requested, return its items
+    if (pageParam) {
+        const page = registry.pages[pageParam];
+        if (!page) return res.status(404).json({ error: `Page "${pageParam}" not found in module "${mod}"` });
 
-        items.push({
-            key: item.key,
-            label: item.label,
-            file: item.file,
-            selector: item.selector,
-            en: el.attr(item.attr) || el.text().trim(),
-            zh: el.attr(item.zhAttr) || ''
-        });
+        const items = [];
+        for (const item of page.items) {
+            const filePath = path.join(ROOT, item.file);
+            if (!fs.existsSync(filePath)) continue;
+            const html = fs.readFileSync(filePath, 'utf-8');
+            const $ = cheerio.load(html);
+            const el = $(item.selector).first();
+            if (!el.length) continue;
+            items.push({
+                key: item.key, label: item.label, file: item.file, selector: item.selector,
+                en: el.attr(item.attr) || el.text().trim(),
+                zh: el.attr(item.zhAttr) || ''
+            });
+        }
+        return res.json({ module: mod, page: pageParam, items, pages });
     }
 
-    res.json({ module: mod, items });
+    // No page specified — return all items from all pages (flat)
+    const items = [];
+    for (const [pageKey, page] of Object.entries(registry.pages)) {
+        for (const item of page.items) {
+            const filePath = path.join(ROOT, item.file);
+            if (!fs.existsSync(filePath)) continue;
+            const html = fs.readFileSync(filePath, 'utf-8');
+            const $ = cheerio.load(html);
+            const el = $(item.selector).first();
+            if (!el.length) continue;
+            items.push({
+                key: item.key, label: item.label, file: item.file, selector: item.selector,
+                page: pageKey, pageLabel: page.label,
+                en: el.attr(item.attr) || el.text().trim(),
+                zh: el.attr(item.zhAttr) || ''
+            });
+        }
+    }
+    res.json({ module: mod, items, pages });
 });
 
 // PUT  /api/content/:module  — update content
@@ -296,7 +390,13 @@ app.put('/api/content/:module', requireAuth, (req, res) => {
     if (!registry) return res.status(404).json({ error: 'Module not found' });
 
     const { key, en, zh } = req.body;
-    const item = registry.find(i => i.key === key);
+
+    // Search all pages for the key
+    let item = null;
+    for (const page of Object.values(registry.pages)) {
+        item = page.items.find(i => i.key === key);
+        if (item) break;
+    }
     if (!item) return res.status(404).json({ error: 'Content item not found' });
 
     const filePath = path.join(ROOT, item.file);
@@ -308,20 +408,13 @@ app.put('/api/content/:module', requireAuth, (req, res) => {
     const el = $(item.selector).first();
     if (!el.length) return res.status(404).json({ error: 'Element not found in HTML' });
 
-    // Update the attributes
     el.attr(item.attr, en);
     if (item.zhAttr && zh) el.attr(item.zhAttr, zh);
-
-    // Also update the text content for the default language
-    const currentText = el.text().trim();
-    // Only update text if the element doesn't have child elements that would be destroyed
-    if (el.children().length === 0) {
-        el.text(en);
-    }
+    if (el.children().length === 0) el.text(en);
 
     fs.writeFileSync(filePath, $.html(), 'utf-8');
 
-    // Also sync index.html if we modified website.html (and vice versa)
+    // Sync index.html ↔ website.html
     if (item.file === 'index.html' && fs.existsSync(path.join(ROOT, 'website.html'))) {
         fs.copyFileSync(filePath, path.join(ROOT, 'website.html'));
     } else if (item.file === 'website.html' && fs.existsSync(path.join(ROOT, 'index.html'))) {

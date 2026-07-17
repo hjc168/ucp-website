@@ -41,7 +41,21 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card" style="margin-bottom:20px;">
+            <div class="card__header">
+                <h3 data-en="Select Page" data-zh="选择页面">Select Page</h3>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;">
+                <select id="pageSelector" onchange="onPageChange()" style="padding:10px 14px;border:2px solid var(--admin-border);border-radius:var(--radius);font-size:14px;font-family:var(--font);outline:none;min-width:280px;">
+                                        <option value="index">Main Page / 产品主页面</option>
+                    <option value="floral-plants">Floral, Plants & Greeneries / 仿真花卉、植物与绿色植物</option>
+                    <option value="home-decor">Home Décor Accents / 家居装饰精品</option>
+                    <option value="seasonal-festive">Seasonal & Festive Décor / 节庆装饰系列</option>
+                </select>
+            </div>
+        </div>
+
+<div class="card">
         <div class="card__header">
             <h3 data-en="Editable Content" data-zh="可编辑内容">Editable Content</h3>
             <span style="font-size:12px;color:var(--admin-text-light);" data-en="Changes are written directly to HTML files" data-zh="修改内容将直接写入 HTML 文件">Changes are written directly to HTML files</span>
@@ -57,21 +71,33 @@
 <script src="js/admin.js"></script>
 <script>
 const MODULE = 'products';
+let currentPage = 'index';
+const PAGES = {
+    "index": { en: "Main Page", zh: "产品主页面" },
+    "floral-plants": { en: "Floral, Plants & Greeneries", zh: "仿真花卉、植物与绿色植物" },
+    "home-decor": { en: "Home Décor Accents", zh: "家居装饰精品" },
+    "seasonal-festive": { en: "Seasonal & Festive Décor", zh: "节庆装饰系列" },
+};
 
 (async () => {
     if (!await checkAuth()) return;
     loadContent();
 })();
 
+function onPageChange() {
+    currentPage = document.getElementById('pageSelector').value;
+    loadContent();
+}
+
 async function loadContent() {
     const form = document.getElementById('contentForm');
+    form.innerHTML = '<p style="color:var(--admin-text-light);padding:20px;text-align:center;">Loading...</p>';
     try {
-        const data = await apiGet(`/api/content/${MODULE}`);
+        const data = await apiGet('/api/content/' + MODULE + '?page=' + currentPage);
         if (!data || !data.items || data.items.length === 0) {
-            form.innerHTML = '<p style="color:var(--admin-text-light);padding:20px;text-align:center;">No editable content found for this module.</p>';
+            form.innerHTML = '<p style="color:var(--admin-text-light);padding:20px;text-align:center;">No editable content found for this page.</p>';
             return;
         }
-
         form.innerHTML = data.items.map(item => `
             <div class="content-item" data-key="${item.key}">
                 <div class="content-item__label">${item.label}</div>
@@ -89,34 +115,24 @@ async function loadContent() {
             </div>
         `).join('');
     } catch (e) {
-        form.innerHTML = '<p style="color:var(--admin-danger);padding:20px;text-align:center;">Failed to load content. Check server connection.</p>';
+        form.innerHTML = '<p style="color:var(--admin-danger);padding:20px;text-align:center;">Failed to load content.</p>';
         console.error(e);
     }
 }
 
 async function saveAll() {
     const items = document.querySelectorAll('.content-item');
-    let saved = 0;
-    let failed = 0;
-
+    let saved = 0, failed = 0;
     for (const item of items) {
         const key = item.dataset.key;
         const en = item.querySelector('.lang-en').value;
         const zh = item.querySelector('.lang-zh').value;
-
         try {
-            const result = await apiPut(`/api/content/${MODULE}`, { key, en, zh });
+            const result = await apiPut('/api/content/' + MODULE, { key, en, zh });
             if (result.success) saved++; else failed++;
-        } catch (e) {
-            failed++;
-        }
+        } catch (e) { failed++; }
     }
-
-    if (failed === 0) {
-        showToast(`${saved} item(s) saved successfully!`, 'success');
-    } else {
-        showToast(`${saved} saved, ${failed} failed`, 'error');
-    }
+    showToast(currentLang === 'zh' ? `已保存 ${saved} 项！` : `${saved} item(s) saved!`, failed ? 'error' : 'success');
 }
 
 function escapeHtml(text) {
@@ -124,7 +140,6 @@ function escapeHtml(text) {
     div.textContent = text || '';
     return div.innerHTML;
 }
-
 function toggleLang() { applyLang(currentLang === 'en' ? 'zh' : 'en'); }
 </script>
 
