@@ -188,8 +188,9 @@ app.delete('/api/images/:id', requireAuth, (req, res) => {
     if (idx === -1) return res.status(404).json({ error: 'Image not found' });
 
     const img = images[idx];
-    // Delete file from disk
-    const filePath = path.join(__dirname, img.path);
+    // Delete file from disk — strip 'admin/' prefix (__dirname already is admin/)
+    const uploadRelPath = img.path.replace(/^admin[\/\\]?/, '');
+    const filePath = path.join(__dirname, uploadRelPath);
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
     images.splice(idx, 1);
@@ -449,9 +450,14 @@ app.post('/api/mount-image', requireAuth, (req, res) => {
     if (!fs.existsSync(pubImgDir)) fs.mkdirSync(pubImgDir, { recursive: true });
     const pubImgPath = path.join(pubImgDir, img.filename);
 
-    const srcUploadPath = path.join(__dirname, img.path);
+    // img.path is 'admin/uploads/<module>/<filename>' — strip 'admin/' prefix
+    // because __dirname already points to the admin/ directory
+    const uploadRelPath = img.path.replace(/^admin[\/\\]?/, '');
+    const srcUploadPath = path.join(__dirname, uploadRelPath);
     if (fs.existsSync(srcUploadPath)) {
         fs.copyFileSync(srcUploadPath, pubImgPath);
+    } else {
+        console.log('[mount-image] Source not found:', srcUploadPath, '(img.path=' + img.path + ')');
     }
 
     // Determine the correct relative path for the HTML file
