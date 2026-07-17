@@ -67,6 +67,9 @@ app.use('/admin', express.static(PUBLIC_DIR));
 // Serve uploaded images
 app.use('/admin/uploads', express.static(UPLOADS_DIR));
 
+// Serve main website from root — allows previewing changes locally
+app.use(express.static(ROOT));
+
 // ── Auth middleware ─────────────────────────────────────
 function requireAuth(req, res, next) {
     if (req.session && req.session.loggedIn) return next();
