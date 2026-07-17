@@ -15,40 +15,44 @@
         <span style="color:#fff;font-weight:700;margin-left:8px;">Wah Tat Admin</span>
     </div>
     <nav class="sidebar__nav">
-        <a href="dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
-        <div class="sidebar__section">Modules</div>
-        <a href="module-home.html"><i class="fas fa-home"></i> <span>Home</span></a>
-        <a href="module-products.html"><i class="fas fa-box"></i> <span>Products</span></a>
-        <a href="module-sustainability.html"><i class="fas fa-leaf"></i> <span>Sustainability</span></a>
-        <a href="module-contact.html"><i class="fas fa-envelope"></i> <span>Contact Us</span></a>
-        <a href="module-about.html"><i class="fas fa-info-circle"></i> <span>About Us</span></a>
-        <div class="sidebar__section">Media</div>
-        <a href="images.html" class="active"><i class="fas fa-images"></i> <span>Image Library</span></a>
+        <a href="dashboard.html"><i class="fas fa-th-large"></i> <span data-en="Dashboard" data-zh="仪表盘">Dashboard</span></a>
+        <div class="sidebar__section" data-en="Modules" data-zh="模块">Modules</div>
+        <a href="module-home.html"><i class="fas fa-home"></i> <span data-en="Home" data-zh="首页">Home</span></a>
+        <a href="module-products.html"><i class="fas fa-box"></i> <span data-en="Products" data-zh="产品">Products</span></a>
+        <a href="module-sustainability.html"><i class="fas fa-leaf"></i> <span data-en="Sustainability" data-zh="可持续发展">Sustainability</span></a>
+        <a href="module-contact.html"><i class="fas fa-envelope"></i> <span data-en="Contact Us" data-zh="联系我们">Contact Us</span></a>
+        <a href="module-about.html"><i class="fas fa-info-circle"></i> <span data-en="About Us" data-zh="关于我们">About Us</span></a>
+        <div class="sidebar__section" data-en="Media" data-zh="媒体">Media</div>
+        <a href="images.html" class="active"><i class="fas fa-images"></i> <span data-en="Image Library" data-zh="图片库">Image Library</span></a>
     </nav>
     <div class="sidebar__footer">
         <a href="#" onclick="logout();return false" style="color:rgba(255,255,255,0.5);">
-            <i class="fas fa-sign-out-alt"></i> Logout
+            <i class="fas fa-sign-out-alt"></i> <span data-en="Logout" data-zh="退出登录">Logout</span>
         </a>
     </div>
 </aside>
 
 <main class="main-content">
     <div class="topbar">
-        <h2>Image Library</h2>
-        <div class="topbar__user"><span>Hi,</span> <strong id="usernameDisplay">...</strong></div>
+        <h2 data-en="Image Library" data-zh="图片库">Image Library</h2>
+        <div class="topbar__user">
+            <button class="lang-toggle" onclick="toggleLang()" title="Switch to Chinese">
+                <i class="fas fa-globe"></i> EN
+            </button>
+            <span data-en="Hi," data-zh="你好，">Hi,</span> <strong id="usernameDisplay">...</strong></div>
     </div>
 
     <!-- Upload Zone -->
     <div class="card">
-        <div class="card__header"><h3><i class="fas fa-upload"></i> Upload Images</h3></div>
+        <div class="card__header"><h3><i class="fas fa-upload"></i> <span data-en="Upload Images" data-zh="上传图片">Upload Images</span></h3></div>
         <div class="upload-zone" id="uploadZone">
             <i class="fas fa-cloud-upload-alt"></i>
-            <p>Drag & drop images here, or click to browse</p>
-            <p style="font-size:11px;margin-top:4px;">JPG, PNG, GIF, WebP, SVG — Max 10 MB each</p>
+            <p data-en="Drag & drop images here, or click to browse" data-zh="拖放图片到此处，或点击浏览">Drag & drop images here, or click to browse</p>
+            <p style="font-size:11px;margin-top:4px;" data-en="JPG, PNG, GIF, WebP, SVG — Max 10 MB each" data-zh="JPG, PNG, GIF, WebP, SVG — 每张最大 10 MB">Max 10 MB each</p>
             <input type="file" id="fileInput" multiple accept="image/*">
         </div>
         <div style="margin-top:12px;display:flex;gap:12px;align-items:center;">
-            <label for="uploadModule" style="font-size:13px;font-weight:600;">Target Module:</label>
+            <label for="uploadModule" style="font-size:13px;font-weight:600;" data-en="Target Module:" data-zh="目标模块：">Target Module:</label>
             <select id="uploadModule">
                 <option value="products">Products</option>
                 <option value="sustainability">Sustainability</option>
@@ -63,7 +67,7 @@
     <!-- Filter Bar -->
     <div class="filter-bar">
         <select id="filterModule" onchange="loadImages()">
-            <option value="">All Modules</option>
+            <option value="" data-en="All Modules" data-zh="全部模块">All Modules</option>
             <option value="products">Products</option>
             <option value="sustainability">Sustainability</option>
             <option value="home">Home</option>

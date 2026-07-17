@@ -60,6 +60,49 @@ async function apiDelete(url) {
     return res.json();
 }
 
+// ── Language Toggle ─────────────────────────────────────
+let currentLang = localStorage.getItem('ucp-lang') || 'en';
+
+function applyLang(lang) {
+    currentLang = lang;
+    // Update all toggle buttons on the page
+    document.querySelectorAll('.lang-toggle').forEach(btn => {
+        btn.innerHTML = currentLang === 'en'
+            ? '<i class="fas fa-globe"></i> EN'
+            : '<i class="fas fa-globe"></i> 中文';
+        btn.title = currentLang === 'en' ? 'Switch to Chinese' : '切换到英文';
+    });
+    // Translate text elements
+    document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+        const newText = el.getAttribute(`data-${currentLang}`);
+        if (!newText) return;
+        if (el.children.length === 0) {
+            el.textContent = newText;
+        } else {
+            for (const node of el.childNodes) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    node.textContent = newText;
+                    break;
+                }
+            }
+        }
+    });
+    // Translate HTML-rich elements
+    document.querySelectorAll('[data-en-html][data-zh-html]').forEach(el => {
+        const html = el.getAttribute(`data-${currentLang}-html`);
+        if (html) el.innerHTML = html;
+    });
+    // Translate placeholders
+    document.querySelectorAll('[data-en-ph][data-zh-ph]').forEach(el => {
+        const ph = el.getAttribute(`data-${currentLang}-ph`);
+        if (ph) el.placeholder = ph;
+    });
+    localStorage.setItem('ucp-lang', currentLang);
+}
+
+// Apply saved language on load
+if (currentLang === 'zh') applyLang('zh');
+
 // ── Logout ──────────────────────────────────────────────
 async function logout() {
     await apiPost('/api/logout', {});

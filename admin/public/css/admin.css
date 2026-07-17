@@ -119,6 +119,26 @@ ul { list-style: none; }
   background: rgba(86, 54, 209, 0.06);
 }
 
+/* Language toggle */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--admin-border);
+  border-radius: 50px;
+  background: var(--admin-white);
+  color: var(--admin-text);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font);
+}
+.lang-toggle:hover { border-color: var(--admin-primary); color: var(--admin-primary); }
+.lang-toggle i { font-size: 12px; }
+.login-lang { position: absolute; top: 20px; right: 24px; }
+
 .captcha-group { display: flex; gap: 12px; align-items: flex-end; }
 .captcha-svg {
   border: 2px solid var(--admin-border);

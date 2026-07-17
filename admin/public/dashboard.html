@@ -16,21 +16,21 @@
         <span style="color:#fff;font-weight:700;margin-left:8px;">Wah Tat Admin</span>
     </div>
     <nav class="sidebar__nav">
-        <a href="dashboard.html" class="active"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
+        <a href="dashboard.html" class="active"><i class="fas fa-th-large"></i> <span data-en="Dashboard" data-zh="仪表盘">Dashboard</span></a>
 
-        <div class="sidebar__section">Modules</div>
-        <a href="module-home.html"><i class="fas fa-home"></i> <span>Home</span></a>
-        <a href="module-products.html"><i class="fas fa-box"></i> <span>Products</span></a>
-        <a href="module-sustainability.html"><i class="fas fa-leaf"></i> <span>Sustainability</span></a>
-        <a href="module-contact.html"><i class="fas fa-envelope"></i> <span>Contact Us</span></a>
-        <a href="module-about.html"><i class="fas fa-info-circle"></i> <span>About Us</span></a>
+        <div class="sidebar__section" data-en="Modules" data-zh="模块">Modules</div>
+        <a href="module-home.html"><i class="fas fa-home"></i> <span data-en="Home" data-zh="首页">Home</span></a>
+        <a href="module-products.html"><i class="fas fa-box"></i> <span data-en="Products" data-zh="产品">Products</span></a>
+        <a href="module-sustainability.html"><i class="fas fa-leaf"></i> <span data-en="Sustainability" data-zh="可持续发展">Sustainability</span></a>
+        <a href="module-contact.html"><i class="fas fa-envelope"></i> <span data-en="Contact Us" data-zh="联系我们">Contact Us</span></a>
+        <a href="module-about.html"><i class="fas fa-info-circle"></i> <span data-en="About Us" data-zh="关于我们">About Us</span></a>
 
-        <div class="sidebar__section">Media</div>
-        <a href="images.html"><i class="fas fa-images"></i> <span>Image Library</span></a>
+        <div class="sidebar__section" data-en="Media" data-zh="媒体">Media</div>
+        <a href="images.html"><i class="fas fa-images"></i> <span data-en="Image Library" data-zh="图片库">Image Library</span></a>
     </nav>
     <div class="sidebar__footer">
         <a href="#" onclick="logout();return false" style="color:rgba(255,255,255,0.5);">
-            <i class="fas fa-sign-out-alt"></i> Logout
+            <i class="fas fa-sign-out-alt"></i> <span data-en="Logout" data-zh="退出登录">Logout</span>
         </a>
     </div>
 </aside>
@@ -38,9 +38,12 @@
 <!-- Main -->
 <main class="main-content">
     <div class="topbar">
-        <h2>Dashboard</h2>
+        <h2 data-en="Dashboard" data-zh="仪表盘">Dashboard</h2>
         <div class="topbar__user">
-            <span>Logged in as</span> <strong id="usernameDisplay">...</strong>
+            <button class="lang-toggle" onclick="toggleLang()" title="Switch to Chinese">
+                <i class="fas fa-globe"></i> EN
+            </button>
+            <span data-en="Logged in as" data-zh="已登录">Logged in as</span> <strong id="usernameDisplay">...</strong>
         </div>
     </div>
 
@@ -51,27 +54,27 @@
 
     <!-- Quick Links -->
     <div class="card">
-        <div class="card__header"><h3><i class="fas fa-folder"></i> Content Modules</h3></div>
+        <div class="card__header"><h3><i class="fas fa-folder"></i> <span data-en="Content Modules" data-zh="内容模块">Content Modules</span></h3></div>
         <div class="quick-links">
             <a href="module-home.html" class="quick-link">
                 <div class="quick-link__icon"><i class="fas fa-home"></i></div>
-                <div class="quick-link__text">Home Page</div>
+                <div class="quick-link__text" data-en="Home Page" data-zh="首页">Home Page</div>
             </a>
             <a href="module-products.html" class="quick-link">
                 <div class="quick-link__icon"><i class="fas fa-box"></i></div>
-                <div class="quick-link__text">Products</div>
+                <div class="quick-link__text" data-en="Products" data-zh="产品">Products</div>
             </a>
             <a href="module-sustainability.html" class="quick-link">
                 <div class="quick-link__icon"><i class="fas fa-leaf"></i></div>
-                <div class="quick-link__text">Sustainability</div>
+                <div class="quick-link__text" data-en="Sustainability" data-zh="可持续发展">Sustainability</div>
             </a>
             <a href="module-contact.html" class="quick-link">
                 <div class="quick-link__icon"><i class="fas fa-envelope"></i></div>
-                <div class="quick-link__text">Contact Us</div>
+                <div class="quick-link__text" data-en="Contact Us" data-zh="联系我们">Contact Us</div>
             </a>
             <a href="module-about.html" class="quick-link">
                 <div class="quick-link__icon"><i class="fas fa-info-circle"></i></div>
-                <div class="quick-link__text">About Us</div>
+                <div class="quick-link__text" data-en="About Us" data-zh="关于我们">About Us</div>
             </a>
         </div>
     </div>
@@ -79,7 +82,7 @@
     <!-- Recent Uploads -->
     <div class="card">
         <div class="card__header">
-            <h3><i class="fas fa-clock"></i> Recent Uploads</h3>
+            <h3><i class="fas fa-clock"></i> <span data-en="Recent Uploads" data-zh="最近上传">Recent Uploads</span></h3>
             <a href="images.html" class="btn btn-outline btn-sm">View All</a>
         </div>
         <div id="recentUploads" style="font-size:14px;color:var(--admin-text-light);">Loading...</div>
@@ -129,6 +132,7 @@
         console.error(e);
     }
 })();
+function toggleLang() { applyLang(currentLang === 'en' ? 'zh' : 'en'); }
 </script>
 
 </body>
