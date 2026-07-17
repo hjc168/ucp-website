@@ -481,6 +481,72 @@ app.post('/api/mount-image', requireAuth, (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════
+//  PAGE IMAGE SCANNING API
+// ══════════════════════════════════════════════════════════
+
+// GET /api/page-images?file=products/floral-plants.html  — scan page for images
+app.get('/api/page-images', requireAuth, (req, res) => {
+    const filePath = req.query.file;
+    if (!filePath) return res.status(400).json({ error: 'file query parameter required' });
+
+    const htmlPath = path.join(ROOT, filePath);
+    if (!fs.existsSync(htmlPath)) return res.status(404).json({ error: 'File not found: ' + filePath });
+
+    const html = fs.readFileSync(htmlPath, 'utf-8');
+    const cheerio = require('cheerio');
+    const $ = cheerio.load(html);
+
+    const images = [];
+    $('img').each((i, el) => {
+        const $el = $(el);
+        const src = $el.attr('src') || '';
+        // Skip header logo and favicon
+        if (src.includes('home-icon/') || src.includes('website-icon/')) return;
+
+        // Build a unique selector for this image
+        let selector = '';
+        const parent = $el.parent();
+        const parentClass = parent.attr('class') || '';
+        const grandParent = parent.parent();
+        const gpClass = grandParent.attr('class') || '';
+
+        if (parentClass) {
+            selector = `${parentClass.split(' ')[0]} img`;
+        } else if (gpClass) {
+            selector = `${gpClass.split(' ')[0]} img`;
+        }
+
+        // Try to build a more specific selector
+        if ($el.closest('.gallery-grid').length) {
+            const idx = $el.closest('.gallery-item').index() + 1;
+            selector = `.gallery-item:nth-child(${idx}) img`;
+        } else if ($el.closest('.product-card').length) {
+            const idx = $el.closest('.product-card').index() + 1;
+            selector = `.product-card:nth-child(${idx}) .product-card__img`;
+        } else if ($el.closest('.split__image').length) {
+            selector = `.split__image img`;
+        } else if ($el.closest('.video-card__thumb').length) {
+            selector = `.video-card__thumb img`;
+        }
+
+        // Determine if local or external
+        const isLocal = src.startsWith('image/') || src.startsWith('../image/');
+        const isExternal = src.startsWith('http');
+
+        images.push({
+            index: i,
+            src: src,
+            alt: $el.attr('alt') || '',
+            selector: selector || `img[src="${src}"]`,
+            isLocal: isLocal,
+            isExternal: isExternal
+        });
+    });
+
+    res.json({ file: filePath, images, count: images.length });
+});
+
+// ══════════════════════════════════════════════════════════
 //  DASHBOARD STATS
 // ══════════════════════════════════════════════════════════
 

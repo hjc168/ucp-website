@@ -55,6 +55,22 @@
             </div>
         </div>
 
+
+        <!-- Page Images -->
+        <div class="card">
+            <div class="card__header">
+                <h3 data-en="Images on This Page" data-zh="当前页面图片"><i class="fas fa-images"></i> Images on This Page</h3>
+                <button class="btn btn-outline btn-sm" onclick="scanPageImages()">
+                    <i class="fas fa-sync-alt"></i> <span data-en="Scan" data-zh="扫描">Scan</span>
+                </button>
+            </div>
+            <div class="image-grid" id="pageImagesGrid">
+                <p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;font-size:14px;">
+                    Click <strong>Scan</strong> to detect images on this page.
+                </p>
+            </div>
+        </div>
+
 <div class="card">
         <div class="card__header">
             <h3 data-en="Editable Content" data-zh="可编辑内容">Editable Content</h3>
@@ -142,6 +158,30 @@ function escapeHtml(text) {
 }
 function toggleLang() { applyLang(currentLang === 'en' ? 'zh' : 'en'); }
 </script>
+
+
+<!-- Image Picker Modal -->
+<div class="modal-overlay" id="pickerModalOverlay">
+    <div class="modal" style="max-width:800px;">
+        <h3 data-en="Select Image from Library" data-zh="从图片库选择">Select Image from Library</h3>
+        <div class="filter-bar" style="margin-bottom:16px;">
+            <select id="pickerModuleFilter" onchange="loadPickerImages()">
+                <option value="">All Modules</option>
+                <option value="products">Products</option>
+                <option value="sustainability">Sustainability</option>
+                <option value="home">Home</option>
+                <option value="contact">Contact</option>
+                <option value="about">About</option>
+            </select>
+        </div>
+        <div class="image-grid" id="pickerImageGrid" style="max-height:400px;overflow-y:auto;">
+            <p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;">Loading...</p>
+        </div>
+        <div class="modal__actions">
+            <button class="btn btn-outline" onclick="closePickerModal()">Cancel</button>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
