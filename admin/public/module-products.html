@@ -161,99 +161,98 @@ function toggleLang() { applyLang(currentLang === 'en' ? 'zh' : 'en'); }
 let pendingReplaceTarget = null;
 
 async function scanPageImages() {
-    const grid = document.getElementById('pageImagesGrid');
-    grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;">Scanning...</p>';
+    var grid = document.getElementById("pageImagesGrid");
+    if (!grid) return;
+    grid.innerHTML = "<p style=\"grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;\">Scanning...</p>";
     try {
-        const actualFile = MODULE === 'home' ? 'index.html' : (currentPage === 'index' ? MODULE + '/index.html' : MODULE + '/' + currentPage + '.html');
-        const data = await apiGet('/api/page-images?file=' + encodeURIComponent(actualFile));
+        var actualFile = MODULE === "home" ? "index.html" : (currentPage === "index" ? MODULE + "/index.html" : MODULE + "/" + currentPage + ".html");
+        var data = await apiGet("/api/page-images?file=" + encodeURIComponent(actualFile));
         if (!data || data.images.length === 0) {
-            grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;">No images found on this page.</p>';
+            grid.innerHTML = "<p style=\"grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;\">No images found on this page.</p>";
             return;
         }
-        grid.innerHTML = data.images.map((img, i) => {
-            let previewSrc = img.src;
-            if (previewSrc.startsWith('image/')) previewSrc = '../' + previewSrc;
-            else if (previewSrc.startsWith('../image/')) previewSrc = previewSrc;
-            return '<div class="image-card">' +
-                '<img class="image-card__preview" src="' + previewSrc + '" alt="' + (img.alt || '') + '" loading="lazy" onerror="this.style.display='none'">' +
-                '<div class="image-card__info">' +
-                '<div class="image-card__name" title="' + img.selector + '">#' + (i+1) + ': ' + (img.alt || 'Image') + '</div>' +
-                '<div class="image-card__meta">' + (img.isExternal ? 'External URL' : 'Local') + '</div>' +
-                '</div>' +
-                '<div class="image-card__actions">' +
-                '<button class="btn btn-primary btn-sm" onclick="openPicker('' + actualFile + '', '' + img.selector.replace(/\/g,'\\').replace(/'/g,"\'") + '')">' +
-                '<i class="fas fa-exchange-alt"></i> Replace</button>' +
-                '</div></div>';
-        }).join('');
+        var html = "";
+        for (var i = 0; i < data.images.length; i++) {
+            var img = data.images[i];
+            var previewSrc = img.src;
+            if (previewSrc.startsWith("image/")) previewSrc = "../" + previewSrc;
+            var sel = img.selector.replace(/\/g, "\\\\").replace(/"/g, "\\"");
+            html += "<div class=\"image-card\">";
+            html += "<img class=\"image-card__preview\" src=\"" + previewSrc + "\" alt=\"" + (img.alt || "") + "\" loading=\"lazy\" onerror=\"this.style.opacity='0.2'\">";
+            html += "<div class=\"image-card__info\">";
+            html += "<div class=\"image-card__name\" title=\"" + sel + "\">#" + (i+1) + ": " + (img.alt || "Image") + "</div>";
+            html += "<div class=\"image-card__meta\">" + (img.isExternal ? "External" : "Local") + "</div>";
+            html += "</div>";
+            html += "<div class=\"image-card__actions\">";
+            html += "<button class=\"btn btn-primary btn-sm\" onclick=\"window.__openPicker('" + actualFile.replace(/'/g, "\'") + "','" + sel + "')\" style=\"font-size:11px;padding:5px 10px;\"><i class=\"fas fa-exchange-alt\"></i> Replace</button>";
+            html += "</div></div>";
+        }
+        grid.innerHTML = html;
     } catch (e) {
-        grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-danger);padding:20px;text-align:center;">Failed to scan images.</p>';
+        grid.innerHTML = "<p style=\"grid-column:1/-1;color:var(--admin-danger);padding:20px;text-align:center;\">Failed to scan images.</p>";
     }
 }
 
-function openPicker(file, selector) {
-    pendingReplaceTarget = { file, selector };
-    document.getElementById('pickerModalOverlay').classList.add('active');
-    if (MODULE) document.getElementById('pickerModuleFilter').value = MODULE;
+window.__openPicker = function(file, selector) {
+    pendingReplaceTarget = { file: file, selector: selector };
+    var overlay = document.getElementById("pickerModalOverlay");
+    if (overlay) overlay.classList.add("active");
+    var filter = document.getElementById("pickerModuleFilter");
+    if (filter && MODULE) filter.value = MODULE;
     loadPickerImages();
-}
+};
 
 function closePickerModal() {
-    document.getElementById('pickerModalOverlay').classList.remove('active');
+    var overlay = document.getElementById("pickerModalOverlay");
+    if (overlay) overlay.classList.remove("active");
     pendingReplaceTarget = null;
 }
 
-document.getElementById('pickerModalOverlay').addEventListener('click', function(e) {
-    if (e.target === document.getElementById('pickerModalOverlay')) closePickerModal();
-});
-
 async function loadPickerImages() {
-    var mod = document.getElementById('pickerModuleFilter').value;
-    var grid = document.getElementById('pickerImageGrid');
-    grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;">Loading...</p>';
+    var modEl = document.getElementById("pickerModuleFilter");
+    var mod = modEl ? modEl.value : "";
+    var grid = document.getElementById("pickerImageGrid");
+    if (!grid) return;
+    grid.innerHTML = "<p style=\"grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;\">Loading...</p>";
     try {
-        var images = await apiGet('/api/images' + (mod ? '?module=' + mod : ''));
+        var images = await apiGet("/api/images" + (mod ? "?module=" + mod : ""));
         if (!images || images.length === 0) {
-            grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;">No images in library. <a href=\"images.html\">Upload first</a>.</p>';
+            grid.innerHTML = "<p style=\"grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;\">No images in library.</p>";
             return;
         }
-        grid.innerHTML = images.map(function(img) {
-            return '<div class="image-card" style="cursor:pointer;" onclick="confirmReplace('' + img.id + '')">' +
-                '<img class="image-card__preview" src="../' + img.path + '" alt="' + img.originalName + '" loading="lazy" onerror="this.style.display='none'">' +
-                '<div class="image-card__info"><div class="image-card__name">' + img.originalName + '</div>' +
-                '<div class="image-card__meta">' + formatSize(img.size) + '</div></div>' +
-                '<div style="padding:0 12px 4px;"><span class="badge badge--' + img.module + '">' + img.module + '</span></div></div>';
-        }).join('');
+        var html = "";
+        for (var j = 0; j < images.length; j++) {
+            var img = images[j];
+            html += "<div class=\"image-card\" style=\"cursor:pointer;\" onclick=\"window.__doReplace('" + img.id + "')\" >";
+            html += "<img class=\"image-card__preview\" src=\"../" + img.path + "\" alt=\"" + img.originalName + "\" loading=\"lazy\" onerror=\"this.style.opacity='0.2'\">";
+            html += "<div class=\"image-card__info\"><div class=\"image-card__name\">" + img.originalName + "</div>";
+            html += "<div class=\"image-card__meta\">" + formatSize(img.size) + "</div></div>";
+            html += "<div style=\"padding:0 12px 4px;\"><span class=\"badge badge--" + img.module + "\">" + img.module + "</span></div></div>";
+        }
+        grid.innerHTML = html;
     } catch (e) {
-        grid.innerHTML = '<p style="grid-column:1/-1;color:var(--admin-danger);padding:20px;text-align:center;">Failed to load library.</p>';
+        grid.innerHTML = "<p style=\"grid-column:1/-1;color:var(--admin-danger);padding:20px;text-align:center;\">Failed to load library.</p>";
     }
 }
 
-async function confirmReplace(imageId) {
+window.__doReplace = async function(imageId) {
     if (!pendingReplaceTarget) return;
     try {
-        var result = await apiPost('/api/mount-image', {
+        var result = await apiPost("/api/mount-image", {
             imageId: imageId,
             filePath: pendingReplaceTarget.file,
             selector: pendingReplaceTarget.selector,
-            attribute: 'src'
+            attribute: "src"
         });
-        if (result.success) {
-            showToast('Image replaced!', 'success');
+        if (result && result.success) {
+            showToast("Image replaced!", "success");
             closePickerModal();
             scanPageImages();
         } else {
-            showToast(result.error || 'Replace failed', 'error');
+            showToast(result ? result.error || "Replace failed" : "Replace failed", "error");
         }
     } catch (e) {
-        showToast('Replace failed', 'error');
-    }
-}
-
-var _origOnPageChange = onPageChange;
-onPageChange = function() {
-    _origOnPageChange();
-    if (document.getElementById('pageImagesGrid')) {
-        document.getElementById('pageImagesGrid').innerHTML = '<p style="grid-column:1/-1;color:var(--admin-text-light);padding:20px;text-align:center;font-size:14px;">Click <strong>Scan</strong> to detect images on this page.</p>';
+        showToast("Replace failed", "error");
     }
 };
 
