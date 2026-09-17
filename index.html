@@ -548,36 +548,13 @@
         }
 
         /* ===== GLOBAL REACH ===== */
+        /* 设计图为白底完整设计，与白色区块背景无缝融合，无边框无阴影 */
         .global-reach {
             text-align: center;
         }
         .global-reach__map {
-            max-width: 1100px;
+            width: 100%;
             margin: 0 auto;
-            border-radius: 16px;
-            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.15);
-        }
-        .global-reach__stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            max-width: 800px;
-            margin: 50px auto 0;
-        }
-        .global-stat {
-            text-align: center;
-            padding: 30px;
-        }
-        .global-stat__number {
-            font-family: var(--font-serif);
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--color-purple);
-        }
-        .global-stat__label {
-            font-size: 14px;
-            color: var(--color-text-light);
-            margin-top: 8px;
         }
 
         /* ===== TESTIMONIALS ===== */
@@ -1052,7 +1029,6 @@
 
             .products-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
             .split { grid-template-columns: 1fr; gap: 30px; }
-            .global-reach__stats { grid-template-columns: 1fr; }
             .impact__grid { grid-template-columns: 1fr 1fr; gap: 16px; }
             .videos-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
             .footer__grid { grid-template-columns: 1fr; gap: 30px; }
@@ -1188,27 +1164,10 @@
     </section>
 
     <!-- ===== GLOBAL REACH ===== -->
+    <!-- 整块区域即为用户设计图本身：白底 + 米色世界地图 + 深绿标记 + 品牌字，不再叠加任何 HTML 文案 -->
     <section class="section">
         <div class="container global-reach">
-            <div class="section__header">
-                <p class="section__label" data-en="Global Presence" data-zh="全球布局">Global Presence</p>
-                <h2 class="section__title" data-en="Our Global Reach" data-zh="我们的全球版图">Our Global Reach</h2>
-            </div>
             <img class="global-reach__map" src="image/home-material/home-global/global-reach.png" alt="Wah Tat global footprint" loading="lazy">
-            <div class="global-reach__stats">
-                <div class="global-stat">
-                    <div class="global-stat__number">60+</div>
-                    <p class="global-stat__label" data-en="Countries Served" data-zh="服务国家">Countries Served</p>
-                </div>
-                <div class="global-stat">
-                    <div class="global-stat__number">5</div>
-                    <p class="global-stat__label" data-en="Manufacturing Facilities" data-zh="生产基地">Manufacturing Facilities</p>
-                </div>
-                <div class="global-stat">
-                    <div class="global-stat__number">1,200+</div>
-                    <p class="global-stat__label" data-en="Patents &amp; Designs" data-zh="专利与设计">Patents &amp; Designs</p>
-                </div>
-            </div>
         </div>
     </section>
 
