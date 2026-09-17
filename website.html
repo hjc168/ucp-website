@@ -501,23 +501,34 @@
             inset: 0;
             background: linear-gradient(
                 180deg,
-                rgba(0, 0, 0, 0.38) 0%,
-                transparent 32%,
-                transparent 58%,
-                rgba(0, 0, 0, 0.6) 100%
+                rgba(0, 0, 0, 0.45) 0%,
+                rgba(0, 0, 0, 0.08) 25%,
+                transparent 50%,
+                rgba(0, 0, 0, 0.28) 100%
             );
         }
-        .product-card__title {
+        .product-card__text {
             position: absolute;
             top: 28px;
             left: 28px;
             right: 28px;
+            color: #fff;
+        }
+        .product-card__label {
+            margin: 0 0 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.9;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+        }
+        .product-card__title {
             margin: 0;
             font-family: var(--font-serif);
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 600;
             line-height: 1.3;
-            color: #fff;
             text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
         }
         .product-card__content {
@@ -531,15 +542,21 @@
         .product-card__arrow {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            font-weight: 600;
+            gap: 8px;
+            padding: 11px 22px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.9);
             transition: var(--transition);
         }
-        .product-card:hover .product-card__arrow { gap: 12px; }
+        .product-card:hover .product-card__arrow {
+            background: var(--color-magenta);
+            border-color: var(--color-magenta);
+            gap: 14px;
+        }
 
         /* ===== GLOBAL REACH ===== */
         .global-reach {
@@ -1141,33 +1158,42 @@
     <section class="section section--cream" id="products">
         <div class="container">
             <div class="section__header">
-                <p class="section__label" data-en="Our Products" data-zh="我们的产品">Our Products</p>
-                <h2 class="section__title" data-en="Designed and Made with<br>Sustainability in Mind" data-zh="以可持续发展为理念<br>设计与制造">Designed and Made with<br>Sustainability in Mind</h2>
+                <p class="section__label" data-en="Our Collections" data-zh="我们的产品系列">Our Collections</p>
+                <h2 class="section__title" data-en="Crafted Artificial Florals for Every Season" data-zh="匠心仿真花艺，适配四季光景">Crafted Artificial Florals for Every Season</h2>
             </div>
 
             <div class="products-grid">
                 <a href="products/floral-plants.html" class="product-card">
-                    <img class="product-card__img" src="image/home-products-material/productsone.jpg" alt="Flowers &amp; Plants" loading="lazy">
+                    <img class="product-card__img" src="image/home-products-material/productsone.jpg" alt="Spring Collection" loading="lazy">
                     <div class="product-card__shade"></div>
-                    <h3 class="product-card__title" data-en="Flowers &amp; Plants" data-zh="花卉及植物">Flowers &amp; Plants</h3>
+                    <div class="product-card__text">
+                        <p class="product-card__label" data-en="Spring Collection" data-zh="春季系列">Spring Collection</p>
+                        <h3 class="product-card__title" data-en="Fresh Blossoms &amp; Delicate Greenery" data-zh="清新花材与细腻绿植">Fresh Blossoms &amp; Delicate Greenery</h3>
+                    </div>
                     <div class="product-card__content">
-                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                        <span class="product-card__arrow" data-en="Explore Spring" data-zh="探索春季系列">Explore Spring <i class="fas fa-arrow-right"></i></span>
                     </div>
                 </a>
                 <a href="products/home-decor.html" class="product-card">
-                    <img class="product-card__img" src="image/home-products-material/productstwo.jpg" alt="Home Décor" loading="lazy">
+                    <img class="product-card__img" src="image/home-products-material/productstwo.jpg" alt="Autumn Collection" loading="lazy">
                     <div class="product-card__shade"></div>
-                    <h3 class="product-card__title" data-en="Home Décor" data-zh="家居装饰">Home Décor</h3>
+                    <div class="product-card__text">
+                        <p class="product-card__label" data-en="Autumn Collection" data-zh="秋季系列">Autumn Collection</p>
+                        <h3 class="product-card__title" data-en="Rich Hues &amp; Textured Foliage" data-zh="浓郁色彩与质感叶材">Rich Hues &amp; Textured Foliage</h3>
+                    </div>
                     <div class="product-card__content">
-                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                        <span class="product-card__arrow" data-en="Explore Autumn" data-zh="探索秋季系列">Explore Autumn <i class="fas fa-arrow-right"></i></span>
                     </div>
                 </a>
                 <a href="products/seasonal-festive.html" class="product-card">
-                    <img class="product-card__img" src="image/home-products-material/productsthree.jpg" alt="Festive &amp; Seasonal" loading="lazy">
+                    <img class="product-card__img" src="image/home-products-material/productsthree.jpg" alt="Holiday Collection" loading="lazy">
                     <div class="product-card__shade"></div>
-                    <h3 class="product-card__title" data-en="Festive &amp; Seasonal" data-zh="节庆及季节">Festive &amp; Seasonal</h3>
+                    <div class="product-card__text">
+                        <p class="product-card__label" data-en="Holiday Collection" data-zh="节日系列">Holiday Collection</p>
+                        <h3 class="product-card__title" data-en="Halloween &amp; Christmas Florals" data-zh="万圣节与圣诞节花艺">Halloween &amp; Christmas Florals</h3>
+                    </div>
                     <div class="product-card__content">
-                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                        <span class="product-card__arrow" data-en="Explore Holidays" data-zh="探索节日系列">Explore Holidays <i class="fas fa-arrow-right"></i></span>
                     </div>
                 </a>
             </div>
