@@ -1031,7 +1031,9 @@
             }
             .nav__item.open .nav__dropdown { display: block; }
             .header__toggle { display: flex; }
-            .header__actions { display: none; }
+            .header__actions { display: flex; gap: 8px; }
+            .header__actions .header__search,
+            .header__actions .header__social { display: none; }
 
             .products-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
             .split { grid-template-columns: 1fr; gap: 30px; }
