@@ -502,8 +502,9 @@
             background: linear-gradient(
                 180deg,
                 rgba(0, 0, 0, 0.38) 0%,
-                rgba(0, 0, 0, 0.05) 30%,
-                transparent 45%
+                transparent 32%,
+                transparent 58%,
+                rgba(0, 0, 0, 0.6) 100%
             );
         }
         .product-card__title {
@@ -519,28 +520,26 @@
             color: #fff;
             text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
         }
-        .product-card__more {
+        .product-card__content {
             position: absolute;
-            bottom: 26px;
-            right: 26px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 28px;
             color: #fff;
-            display: flex;
+        }
+        .product-card__arrow {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-size: 17px;
-            background: rgba(0, 0, 0, 0.18);
-            backdrop-filter: blur(3px);
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.9);
             transition: var(--transition);
         }
-        .product-card:hover .product-card__more {
-            background: var(--color-magenta);
-            border-color: var(--color-magenta);
-            transform: scale(1.08);
-        }
+        .product-card:hover .product-card__arrow { gap: 12px; }
 
         /* ===== GLOBAL REACH ===== */
         .global-reach {
@@ -1148,22 +1147,28 @@
 
             <div class="products-grid">
                 <a href="products/floral-plants.html" class="product-card">
-                    <img class="product-card__img" src="image/site-images/ucp/UPC-Products-Services-Category-1.png" alt="Flowers &amp; Plants" loading="lazy">
+                    <img class="product-card__img" src="image/home-products-material/productsone.jpg" alt="Flowers &amp; Plants" loading="lazy">
                     <div class="product-card__shade"></div>
                     <h3 class="product-card__title" data-en="Flowers &amp; Plants" data-zh="花卉及植物">Flowers &amp; Plants</h3>
-                    <span class="product-card__more" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                    <div class="product-card__content">
+                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
                 </a>
                 <a href="products/home-decor.html" class="product-card">
-                    <img class="product-card__img" src="image/site-images/ucp/UPC-Products-Services-Category-2.jpg" alt="Home Décor" loading="lazy">
+                    <img class="product-card__img" src="image/home-products-material/productstwo.jpg" alt="Home Décor" loading="lazy">
                     <div class="product-card__shade"></div>
                     <h3 class="product-card__title" data-en="Home Décor" data-zh="家居装饰">Home Décor</h3>
-                    <span class="product-card__more" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                    <div class="product-card__content">
+                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
                 </a>
                 <a href="products/seasonal-festive.html" class="product-card">
-                    <img class="product-card__img" src="image/site-images/ucp/UPC-Products-Services-Category-3.jpg" alt="Festive &amp; Seasonal" loading="lazy">
+                    <img class="product-card__img" src="image/home-products-material/productsthree.jpg" alt="Festive &amp; Seasonal" loading="lazy">
                     <div class="product-card__shade"></div>
                     <h3 class="product-card__title" data-en="Festive &amp; Seasonal" data-zh="节庆及季节">Festive &amp; Seasonal</h3>
-                    <span class="product-card__more" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                    <div class="product-card__content">
+                        <span class="product-card__arrow" data-en="Learn More" data-zh="了解更多">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
                 </a>
             </div>
         </div>
